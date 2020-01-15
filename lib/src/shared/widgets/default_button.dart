@@ -20,6 +20,7 @@ class DefaultButton extends StatelessWidget {
       child: FlatButton(
         child: this.child,
         onPressed: this.onPressed,
+        disabledColor: Colors.grey,
       ),
     );
   }

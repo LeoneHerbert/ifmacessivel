@@ -1,7 +1,7 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ifmaacessivel/src/pages/home/home_page.dart';
+import 'package:ifmaacessivel/src/pages/login/login_module.dart';
 import 'package:ifmaacessivel/src/pages/login/login_page.dart';
 
 class SideMenu extends StatelessWidget {
@@ -39,7 +39,8 @@ class SideMenu extends StatelessWidget {
                 ),
                 accountEmail: new Text('herbleopin@gmail.com'),
                 currentAccountPicture: ClipOval(
-                  child: Image.network("https://firebasestorage.googleapis.com/v0/b/sistema-de-estoque.appspot.com/o/Fotoperfil.png?alt=media&token=60a32e98-cb29-4961-8465-1b4dbb1207dd"),
+                  child: Image.network(
+                      "https://firebasestorage.googleapis.com/v0/b/sistema-de-estoque.appspot.com/o/Fotoperfil.png?alt=media&token=60a32e98-cb29-4961-8465-1b4dbb1207dd"),
                 ),
               ),
               ListTile(
@@ -198,12 +199,7 @@ class SideMenu extends StatelessWidget {
                   ),
                 ),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    CupertinoPageRoute(
-                      builder: (context) => LoginPage(),
-                    ),
-                  );
+                  LoginModule();
                 },
               )
             ],

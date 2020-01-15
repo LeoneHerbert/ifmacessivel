@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:ifmaacessivel/src/pages/login/login_page.dart';
+import 'package:ifmaacessivel/src/pages/login/login_module.dart';
 
 
 class AppWidget extends StatelessWidget {
@@ -43,7 +43,7 @@ class AppWidget extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: LoginModule(),
     );
   }
 }
