@@ -1,4 +1,4 @@
-class Produto {
+class Setor {
   int id;
   String nome;
   String codigoDeBarra;
@@ -7,7 +7,7 @@ class Produto {
   String valor;
   String image;
 
-  Produto({
+  Setor({
     this.id,
     this.nome,
     this.codigoDeBarra,
@@ -17,8 +17,8 @@ class Produto {
     this.image,
   });
 
-  factory Produto.fromJson(Map<String, dynamic> json) {
-    return Produto(
+  factory Setor.fromJson(Map<String, dynamic> json) {
+    return Setor(
       id: json["id"],
       nome: json["nome"],
       codigoDeBarra: json["codigo_de_barra"],

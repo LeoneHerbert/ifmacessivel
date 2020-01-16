@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ifmaacessivel/src/app/app_module.dart';
+import 'package:ifmaacessivel/src/auth/authentification.dart';
 import 'package:ifmaacessivel/src/shared/widgets/card_item.dart';
 import 'package:ifmaacessivel/src/shared/widgets/custom_appbar.dart';
 import 'package:ifmaacessivel/src/shared/widgets/float_page.dart';
@@ -10,6 +12,8 @@ class SetoresPage extends StatefulWidget {
 }
 
 class _SetoresPageState extends State<SetoresPage> {
+  Authentification auth = AppModule.to.getDependency<Authentification>();
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +39,7 @@ class _SetoresPageState extends State<SetoresPage> {
           ),
           new CardItem(
             "https://firebasestorage.googleapis.com/v0/b/sistema-de-estoque.appspot.com/o/Meu-Biju_Arroz-Produto.png?alt=media&token=f3c3b2ea-1afd-4b62-a5dc-a0209ac9c1fc",
-            "Arroz Meu Biju",
+            auth.getUser().uid.toString(),
           ),
           new CardItem(
             "https://firebasestorage.googleapis.com/v0/b/sistema-de-estoque.appspot.com/o/TioJorge_Feija%CC%83o-Fradinho.png?alt=media&token=0de7bc21-aad5-4e2f-88d9-a4a6a466347d",
