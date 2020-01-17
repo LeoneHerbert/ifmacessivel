@@ -1,10 +1,29 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ifmaacessivel/src/app/app_module.dart';
+import 'package:ifmaacessivel/src/auth/authentification.dart';
 import 'package:ifmaacessivel/src/pages/home/home_page.dart';
 import 'package:ifmaacessivel/src/pages/login/login_module.dart';
 import 'package:ifmaacessivel/src/pages/login/login_page.dart';
 
 class SideMenu extends StatelessWidget {
+  Authentification auth = AppModule.to.getDependency<Authentification>();
+  String _nome, _url;
+
+  SideMenu(){
+    Firestore.instance
+        .collection(auth.getUserId())
+        .document("usuario")
+        .snapshots()
+        .listen(
+      (dado) {
+        _nome = dado.data['nome'];
+        _url = dado.data['imageUrl'];
+      },
+    );
+  }
+
   Widget build(BuildContext context) {
     Widget _buildDrawerBack() => Container(
           decoration: BoxDecoration(
@@ -26,7 +45,7 @@ class SideMenu extends StatelessWidget {
           ListView(
             children: <Widget>[
               new UserAccountsDrawerHeader(
-                accountName: new Text('Herbert'),
+                accountName: new Text(_nome),
                 decoration: BoxDecoration(
                   color: Theme.of(context).primaryColor,
                   boxShadow: [
@@ -37,10 +56,8 @@ class SideMenu extends StatelessWidget {
                     )
                   ],
                 ),
-                accountEmail: new Text('herbleopin@gmail.com'),
                 currentAccountPicture: ClipOval(
-                  child: Image.network(
-                      "https://firebasestorage.googleapis.com/v0/b/sistema-de-estoque.appspot.com/o/Fotoperfil.png?alt=media&token=60a32e98-cb29-4961-8465-1b4dbb1207dd"),
+                  child: Image.network(_url),
                 ),
               ),
               ListTile(
