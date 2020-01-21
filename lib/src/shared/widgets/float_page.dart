@@ -78,28 +78,6 @@ class FloatPage extends StatelessWidget {
                 ],
               ),
               SizedBox(
-                height: 20,
-              ),
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: TextFormField(
-                      minLines: this.minLinesThirdInput,
-                      maxLines: this.maxLinesThirdInput,
-                      decoration: InputDecoration(
-                        hintText: this.input3,
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.black,
-                            width: 5.0,
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(
                 height: 30,
               ),
               Row(

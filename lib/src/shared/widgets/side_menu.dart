@@ -46,6 +46,7 @@ class SideMenu extends StatelessWidget {
             children: <Widget>[
               new UserAccountsDrawerHeader(
                 accountName: new Text(_nome),
+                accountEmail: null,
                 decoration: BoxDecoration(
                   color: Theme.of(context).primaryColor,
                   boxShadow: [

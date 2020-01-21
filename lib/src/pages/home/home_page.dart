@@ -1,8 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ifmaacessivel/src/app/app_module.dart';
-import 'package:ifmaacessivel/src/auth/authentification.dart';
 import 'package:ifmaacessivel/src/models/usuario/usuario_repository.dart';
 import 'package:ifmaacessivel/src/pages/setores/setores_page.dart';
 import 'package:ifmaacessivel/src/shared/widgets/side_menu.dart';

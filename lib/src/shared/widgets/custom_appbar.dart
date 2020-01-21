@@ -62,7 +62,7 @@ class CustomAppBar extends StatelessWidget {
           ),
           TextField(
             decoration: InputDecoration(
-              hintText: "Produto...",
+              hintText: "Setores...",
               fillColor: Theme.of(context).highlightColor,
               filled: true,
               suffixIcon: Icon(

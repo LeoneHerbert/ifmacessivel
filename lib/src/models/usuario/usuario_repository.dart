@@ -1,7 +1,5 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ifmaacessivel/src/app/app_module.dart';
 import 'package:ifmaacessivel/src/auth/authentification.dart';
 import 'package:ifmaacessivel/src/models/usuario/usuario.dart';
@@ -17,7 +15,7 @@ class UsuarioRepository {
     getUsuario();
   }
 
-  Map<String, dynamic> getUsuario() {
+  Usuario getUsuario() {
     try {
       Firestore.instance
           .collection(_userId)
@@ -28,6 +26,7 @@ class UsuarioRepository {
           _usuario.nome = dado.data['nome'];
           _usuario.imageUrl = dado.data['imageUrl'];
           _usuario.encarregado = dado.data['encarregado'];
+          return _usuario;
         },
       );
     } catch (e) {

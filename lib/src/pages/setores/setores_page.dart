@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ifmaacessivel/src/app/app_module.dart';
 import 'package:ifmaacessivel/src/auth/authentification.dart';
+import 'package:ifmaacessivel/src/pages/checklist/checklist_page.dart';
 import 'package:ifmaacessivel/src/shared/widgets/card_item.dart';
 import 'package:ifmaacessivel/src/shared/widgets/custom_appbar.dart';
 import 'package:ifmaacessivel/src/shared/widgets/float_page.dart';
@@ -17,13 +18,29 @@ class _SetoresPageState extends State<SetoresPage> {
   String _nome, _url;
 
   @override
+  void initState() {
+    Firestore.instance
+        .collection(auth.getUserId())
+        .document("usuario")
+        .snapshots()
+        .listen(
+      (dado) {
+        _nome = dado.data['nome'];
+        _url = dado.data['imageUrl'];
+      },
+    );
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder<QuerySnapshot>(
         stream: Firestore.instance
             .collection("criterios_de_acessibilidade")
-            .document("calcada").collection("geral").
-            snapshots(),
+            .document("calcada")
+            .collection("geral")
+            .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) return new Text('Error: ${snapshot.error}');
           switch (snapshot.connectionState) {
@@ -32,7 +49,7 @@ class _SetoresPageState extends State<SetoresPage> {
             default:
               return ListView(
                 children: <Widget>[
-                  new CustomAppBar("herbert", "snapshot.data['imageUrl']"),
+                  new CustomAppBar(_nome, _url),
                   Padding(
                     padding: EdgeInsets.all(16.0),
                   ),
@@ -52,10 +69,10 @@ class _SetoresPageState extends State<SetoresPage> {
                   ),
                   SingleChildScrollView(
                     child: Column(
-                      children: 
-                        snapshot.data.documents.map((document) => CardItem(document.data['situacao'], document.data['texto'])).toList()
-                
-                    ),
+                        children: snapshot.data.documents
+                            .map((document) => CardItem(
+                                document.documentID, document.data['texto']))
+                            .toList()),
                   )
                 ],
               );
@@ -64,15 +81,10 @@ class _SetoresPageState extends State<SetoresPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) => FloatPage(
-              'Pedido de Estoque',
-              'Filial',
-              'Cliente',
-              'Observação',
-              1,
-              5,
+          Navigator.push(
+            context,
+            CupertinoPageRoute(
+              builder: (context) => ChecklistPage(),
             ),
           );
         },
