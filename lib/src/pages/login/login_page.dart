@@ -196,14 +196,4 @@ class _LoginPageState extends State<LoginPage> {
       ],
     );
   }
-
-  Future<int> signIn() async {
-    Navigator.push(
-      context,
-      CupertinoPageRoute(
-        builder: (context) => HomePage(),
-      ),
-    );
-    return 0;
-  }
 }

@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ifmaacessivel/src/pages/checklist/checklist_bloc.dart';
+import 'package:ifmaacessivel/src/pages/checklist/checklist_module.dart';
 import 'package:ifmaacessivel/src/shared/widgets/checklist_card.dart';
 
 class ChecklistPage extends StatefulWidget {
@@ -9,7 +11,9 @@ class ChecklistPage extends StatefulWidget {
 }
 
 class _ChecklistPageState extends State<ChecklistPage> {
+  //final _CheckclistBloc = ChecklistModule.to.getBloc<ChecklistBloc>();
   int _selectedRadio;
+
 
   @override
   void initState() {
@@ -45,12 +49,14 @@ class _ChecklistPageState extends State<ChecklistPage> {
                 children: <Widget>[
                   SingleChildScrollView(
                     child: Column(
-                        children: snapshot.data.documents
-                            .map((document) => ChecklistCard(
-                                document.data['texto'],
-                                _selectedRadio,
-                                _setSelectedRadio))
-                            .toList()),
+                      children: snapshot.data.documents
+                          .map(
+                            (document) => ChecklistCard(
+                              document.data['texto'],
+                            ),
+                          )
+                          .toList(),
+                    ),
                   )
                 ],
               );

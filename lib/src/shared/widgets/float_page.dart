@@ -1,124 +1,104 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ifmaacessivel/src/pages/checklist/checklist_page.dart';
 
 class FloatPage extends StatelessWidget {
-  final String titulo;
-  final String input1;
-  final String input2;
-  final String input3;
-  final int minLinesThirdInput;
-  final int maxLinesThirdInput;
+  final StreamController<String> _streamController = StreamController<String>();
+  final List<DropdownMenuItem<String>> dropDownMenuItems;
+  String _statusSel;
 
-  FloatPage(
-    this.titulo,
-    this.input1,
-    this.input2,
-    this.input3,
-    this.minLinesThirdInput,
-    this.maxLinesThirdInput,
-  );
+  FloatPage(this.dropDownMenuItems) {
+    _statusSel = dropDownMenuItems[0].value;
+  }
+
+  void changedDropDownItem(String selectedItem) {
+    print(dropDownMenuItems[2].child);
+    _statusSel = selectedItem;
+    _streamController.sink.add(_statusSel);
+    print(_statusSel);
+  }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       content: Container(
         width: MediaQuery.of(context).size.width / 1.5,
-        height: MediaQuery.of(context).size.height / 2,
+        height: MediaQuery.of(context).size.height / 3,
         child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                this.titulo,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-              ),
-              SizedBox(
-                height: 25,
-              ),
-              Row(
+          child: StreamBuilder<String>(
+            stream: _streamController.stream,
+            builder: (context, snapshot) {
+              return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Expanded(
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        hintText: this.input1,
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.black,
-                            width: 5.0,
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Expanded(
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        hintText: this.input2,
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.black,
-                            width: 5.0,
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              Row(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(
-                      left: 30,
-                      right: 20,
-                    ),
-                    child: RaisedButton(
-                      child: Text(
-                        "Cancelar",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
+                  Text(
+                    'Setor',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 20),
-                    child: RaisedButton(
-                      color: Theme.of(context).primaryColor,
-                      child: Text(
-                        "Confirmar",
-                        style: TextStyle(
-                          color: Theme.of(context).highlightColor,
-                          fontWeight: FontWeight.bold,
+                  SizedBox(
+                    height: 25,
+                  ),
+                  new DropdownButton(
+                    style: new TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.bold),
+                    value: _statusSel,
+                    items: dropDownMenuItems,
+                    onChanged: changedDropDownItem,
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(
+                          left: 30,
+                          right: 20,
+                        ),
+                        child: RaisedButton(
+                          child: Text(
+                            "Cancelar",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
                         ),
                       ),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 20),
+                        child: RaisedButton(
+                          color: Theme.of(context).primaryColor,
+                          child: Text(
+                            "Confirmar",
+                            style: TextStyle(
+                              color: Theme.of(context).highlightColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder: (context) => new ChecklistPage(),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  )
                 ],
-              )
-            ],
+              );
+            },
           ),
         ),
       ),

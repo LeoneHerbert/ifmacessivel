@@ -16,6 +16,7 @@ class SetoresPage extends StatefulWidget {
 class _SetoresPageState extends State<SetoresPage> {
   Authentification auth = AppModule.to.getDependency<Authentification>();
   String _nome, _url;
+  List<DropdownMenuItem<String>> _dropDownMenuItems = new List();
 
   @override
   void initState() {
@@ -29,7 +30,37 @@ class _SetoresPageState extends State<SetoresPage> {
         _url = dado.data['imageUrl'];
       },
     );
+    setDropdownList();
     super.initState();
+  }
+
+  void setDropdownList(){
+    _dropDownMenuItems.add(
+      new DropdownMenuItem(
+        child: new Text('SELECIONE'),
+      ),
+    );
+
+    _dropDownMenuItems.add(
+      new DropdownMenuItem(
+        value: 'Escada',
+        child: new Text('ESCADA'),
+      ),
+    );
+
+    _dropDownMenuItems.add(
+      new DropdownMenuItem(
+        value: 'Estacionamento',
+        child: new Text('ESTACIONAMENTO'),
+      ),
+    );
+
+    _dropDownMenuItems.add(
+      new DropdownMenuItem(
+        value: 'Acesso à edificação',
+        child: new Text('ACESSO À EDIFICAÇÃO'),
+      ),
+    );
   }
 
   @override
@@ -81,11 +112,9 @@ class _SetoresPageState extends State<SetoresPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(
-            context,
-            CupertinoPageRoute(
-              builder: (context) => ChecklistPage(),
-            ),
+          showDialog(
+            context: context,
+            builder: (context) => new FloatPage(_dropDownMenuItems),
           );
         },
         child: Icon(
