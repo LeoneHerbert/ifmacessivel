@@ -32,6 +32,8 @@ dependencies:
   bloc_pattern: 2.2.3
   scoped_model: 1.0.1
   rxdart: 0.22.1+1
+  flutter_plugin_pdf_viewer: 
+  flutter_speed_dial: 1.2.1
 
 dev_dependencies:
   flutter_test:

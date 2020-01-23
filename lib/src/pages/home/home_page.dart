@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ifmaacessivel/src/models/usuario/usuario_repository.dart';
+import 'package:ifmaacessivel/src/pages/documentos/documentos_page.dart';
 import 'package:ifmaacessivel/src/pages/setores/setores_page.dart';
 import 'package:ifmaacessivel/src/shared/widgets/side_menu.dart';
 
@@ -129,7 +130,7 @@ class _HomePageState extends State<HomePage> {
                   Navigator.push(
                     context,
                     CupertinoPageRoute(
-                      builder: (context) => HomePage(),
+                      builder: (context) => PDFViewer(),
                     ),
                   );
                 },

@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:ifmaacessivel/src/pages/checklist/checklist_bloc.dart';
 import 'package:ifmaacessivel/src/pages/checklist/checklist_module.dart';
 import 'package:ifmaacessivel/src/shared/widgets/checklist_card.dart';
+import 'package:ifmaacessivel/src/shared/widgets/default_button.dart';
 
 class ChecklistPage extends StatefulWidget {
   @override
@@ -13,7 +15,6 @@ class ChecklistPage extends StatefulWidget {
 class _ChecklistPageState extends State<ChecklistPage> {
   //final _CheckclistBloc = ChecklistModule.to.getBloc<ChecklistBloc>();
   int _selectedRadio;
-
 
   @override
   void initState() {
@@ -57,11 +58,44 @@ class _ChecklistPageState extends State<ChecklistPage> {
                           )
                           .toList(),
                     ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.all(10),
+                    child: DefaultButton(
+                      child: Text(
+                        "Enviar",
+                        style: TextStyle(
+                          color: Theme.of(context).highlightColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      onPressed: () {},
+                    ),
                   )
                 ],
               );
           }
         },
+      ),
+      floatingActionButton: SpeedDial(
+        animatedIcon: AnimatedIcons.view_list,
+        backgroundColor: Theme.of(context).primaryColor,
+        children: [
+          SpeedDialChild(
+            child: Icon(
+              Icons.photo_camera,
+            ),
+            label: "Câmera",
+            onTap: () => print("photo"),
+          ),
+          SpeedDialChild(
+            child: Icon(
+              Icons.photo_library,
+            ),
+            label: "Galeria",
+            onTap: () => print("library"),
+          )
+        ],
       ),
     );
   }
