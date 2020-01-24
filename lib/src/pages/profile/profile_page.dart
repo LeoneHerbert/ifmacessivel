@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:ifmaacessivel/src/app/app_module.dart';
+import 'package:ifmaacessivel/src/auth/authentification.dart';
 import 'package:ifmaacessivel/src/shared/widgets/float_notification.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -64,7 +66,7 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       body: StreamBuilder<DocumentSnapshot>(
           stream: Firestore.instance
-              .collection("2uNNoI6pvEbRND9pBWqoJj4LTZY2")
+              .collection(AppModule.to.getDependency<Authentification>().getUserId())
               .document("usuario")
               .snapshots(),
           builder: (context, snapshot) {

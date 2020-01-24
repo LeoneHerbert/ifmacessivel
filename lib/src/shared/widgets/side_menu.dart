@@ -12,31 +12,18 @@ import 'package:ifmaacessivel/src/pages/profile/profile_module.dart';
 import 'package:ifmaacessivel/src/pages/setores/setores_module.dart';
 
 class SideMenu extends StatelessWidget {
-  Authentification auth = AppModule.to.getDependency<Authentification>();
   String _nome, _url;
   String _path = '...';
   String _extension;
   bool _hasValidMime = false;
 
-  SideMenu() {
-    Firestore.instance
-        .collection(auth.getUserId())
-        .document("usuario")
-        .snapshots()
-        .listen(
-      (dado) {
-        _nome = dado.data['nome'];
-        _url = dado.data['imageUrl'];
-      },
-    );
-  }
-
   void _openFileExplorer() async {
-      try {
-        _path = await FilePicker.getFilePath(type: FileType.ANY, fileExtension: _extension);
-      } catch (e) {
-        print("Unsupported operation" + e.toString());
-      }
+    try {
+      _path = await FilePicker.getFilePath(
+          type: FileType.ANY, fileExtension: _extension);
+    } catch (e) {
+      print("Unsupported operation" + e.toString());
+    }
   }
 
   Widget build(BuildContext context) {
@@ -59,30 +46,38 @@ class SideMenu extends StatelessWidget {
           _buildDrawerBack(),
           ListView(
             children: <Widget>[
-              new UserAccountsDrawerHeader(
-                accountName: new Text(_nome),
-                accountEmail: null,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Theme.of(context).accentColor,
-                      blurRadius: 5.0,
-                      spreadRadius: 2.0,
-                    )
-                  ],
-                ),
-                currentAccountPicture: new Container(
-                  decoration: new BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: new DecorationImage(
-                      fit: BoxFit.fill,
-                      image: NetworkImage(
-                        _url,
+              StreamBuilder<DocumentSnapshot>(
+                stream: Firestore.instance
+              .collection(AppModule.to.getDependency<Authentification>().getUserId())
+              .document("usuario")
+              .snapshots(),
+                builder: (context, snapshot) {
+                  return new UserAccountsDrawerHeader(
+                    accountName: new Text(snapshot.data['nome']),
+                    accountEmail: null,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Theme.of(context).accentColor,
+                          blurRadius: 5.0,
+                          spreadRadius: 2.0,
+                        )
+                      ],
+                    ),
+                    currentAccountPicture: new Container(
+                      decoration: new BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: new DecorationImage(
+                          fit: BoxFit.fill,
+                          image: NetworkImage(
+                            snapshot.data['imageUrl'],
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
+                  );
+                }
               ),
               ListTile(
                 leading: Icon(
@@ -215,27 +210,12 @@ class SideMenu extends StatelessWidget {
                   Navigator.push(
                     context,
                     CupertinoPageRoute(
-                      builder: (context) => LoginPage(),
+                      builder: (context) => LoginModule(),
                     ),
                   );
+                  AppModule.to.getDependency<Authentification>().logout();
                 },
               ),
-              ListTile(
-                leading: Icon(
-                  Icons.exit_to_app,
-                  color: Theme.of(context).accentColor,
-                ),
-                title: new Text(
-                  'Sair',
-                  style: TextStyle(
-                    color: Theme.of(context).accentColor,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                onTap: () {
-                  LoginModule();
-                },
-              )
             ],
           )
         ],
