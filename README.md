@@ -1,6 +1,6 @@
-# ifmaacessivel
+# ifmacessivel
 
-A new Flutter application.
+Developed by Herbert Leone Pinheiro
 
 ## Getting Started
 
