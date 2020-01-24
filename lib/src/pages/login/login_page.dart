@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ifmaacessivel/src/models/enums/estado.dart';
 import 'package:ifmaacessivel/src/pages/home/home_module.dart';
-import 'package:ifmaacessivel/src/pages/home/home_page.dart';
 import 'package:ifmaacessivel/src/pages/login/login_bloc.dart';
 import 'package:ifmaacessivel/src/pages/login/login_module.dart';
 import 'package:ifmaacessivel/src/shared/widgets/custom_text_field.dart';
@@ -57,7 +56,8 @@ class _LoginPageState extends State<LoginPage> {
           case Estado.CARREGANDO:
             return Center(
               child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation(Theme.of(context).primaryColor),
+                valueColor:
+                    AlwaysStoppedAnimation(Theme.of(context).primaryColor),
               ),
             );
           case Estado.FALHA:
@@ -109,21 +109,20 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
         ),
-        Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          padding: EdgeInsets.only(top: 265),
-          child: Form(
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(30.0),
+        SingleChildScrollView(
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            padding: EdgeInsets.only(top: 265),
+            child: Form(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(30.0),
+                  ),
                 ),
-              ),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
                 child: Column(
                   children: <Widget>[
                     SizedBox(
@@ -173,20 +172,23 @@ class _LoginPageState extends State<LoginPage> {
                       height: 20,
                     ),
                     StreamBuilder<bool>(
-                      stream: _loginBloc.outSubmitValido,
-                      builder: (context, snapshot) {
-                        return DefaultButton(
-                          child: Text(
-                            "Entrar",
-                            style: TextStyle(
-                              color: Theme.of(context).highlightColor,
-                              fontWeight: FontWeight.bold,
+                        stream: _loginBloc.outSubmitValido,
+                        builder: (context, snapshot) {
+                          return DefaultButton(
+                            child: Text(
+                              "Entrar",
+                              style: TextStyle(
+                                color: Theme.of(context).highlightColor,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          onPressed: snapshot.hasData ? () async { _loginBloc.submit(); } : null,
-                        );
-                      }
-                    )
+                            onPressed: snapshot.hasData
+                                ? () async {
+                                    _loginBloc.submit();
+                                  }
+                                : null,
+                          );
+                        })
                   ],
                 ),
               ),

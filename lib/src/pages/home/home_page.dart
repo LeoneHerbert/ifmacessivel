@@ -1,21 +1,22 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ifmaacessivel/src/models/usuario/usuario_repository.dart';
-import 'package:ifmaacessivel/src/pages/documentos/documentos_page.dart';
-import 'package:ifmaacessivel/src/pages/setores/setores_page.dart';
+import 'package:ifmaacessivel/src/pages/profile/profile_module.dart';
+import 'package:ifmaacessivel/src/pages/setores/setores_module.dart';
 import 'package:ifmaacessivel/src/shared/widgets/side_menu.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
-
-  HomePage() {
-    UsuarioRepository();
-  }
 }
 
 class _HomePageState extends State<HomePage> {
-  
+  String _path = '...';
+  String _extension;
+  bool _hasValidMime = false;
+  TextEditingController _controller = new TextEditingController();
+
   Decoration box() {
     return BoxDecoration(
       boxShadow: [
@@ -37,6 +38,32 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  @override
+  void initState() {
+    super.initState();
+    super.initState();
+    _controller.addListener(
+      () => _extension = _controller.text,
+    );
+  }
+
+  void customLaunch(command) async {
+    if (await canLaunch(command)) {
+      await launch(command);
+    } else {
+      print(' could not launch $command');
+    }
+  }
+
+  void _openFileExplorer() async {
+    try {
+      _path = await FilePicker.getFilePath(
+          type: FileType.ANY, fileExtension: _extension);
+    } catch (e) {
+      print("Unsupported operation" + e.toString());
+    }
+  }
+
   TextStyle text(cor) {
     return TextStyle(color: cor, fontWeight: FontWeight.bold, fontSize: 25);
   }
@@ -49,7 +76,6 @@ class _HomePageState extends State<HomePage> {
           'Home',
         ),
       ),
-      
       drawer: new SideMenu(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -62,7 +88,7 @@ class _HomePageState extends State<HomePage> {
                   Navigator.push(
                     context,
                     CupertinoPageRoute(
-                      builder: (context) => SetoresPage(),
+                      builder: (context) => SetoresModule(),
                     ),
                   );
                 },
@@ -90,14 +116,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    CupertinoPageRoute(
-                      builder: (context) => HomePage(),
-                    ),
-                  );
-                },
+                onTap: _openFileExplorer,
                 child: Container(
                   margin: EdgeInsets.all(10),
                   height: 170,
@@ -130,7 +149,7 @@ class _HomePageState extends State<HomePage> {
                   Navigator.push(
                     context,
                     CupertinoPageRoute(
-                      builder: (context) => PDFViewer(),
+                      builder: (context) => ProfileModule(),
                     ),
                   );
                 },
@@ -159,12 +178,8 @@ class _HomePageState extends State<HomePage> {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    CupertinoPageRoute(
-                      builder: (context) => HomePage(),
-                    ),
-                  );
+                  customLaunch(
+                      'mailto:reitoria');
                 },
                 child: Container(
                   margin: EdgeInsets.all(10),

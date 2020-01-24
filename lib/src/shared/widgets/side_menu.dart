@@ -1,17 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ifmaacessivel/src/app/app_module.dart';
 import 'package:ifmaacessivel/src/auth/authentification.dart';
+import 'package:ifmaacessivel/src/pages/home/home_module.dart';
 import 'package:ifmaacessivel/src/pages/home/home_page.dart';
 import 'package:ifmaacessivel/src/pages/login/login_module.dart';
 import 'package:ifmaacessivel/src/pages/login/login_page.dart';
+import 'package:ifmaacessivel/src/pages/profile/profile_module.dart';
+import 'package:ifmaacessivel/src/pages/setores/setores_module.dart';
 
 class SideMenu extends StatelessWidget {
   Authentification auth = AppModule.to.getDependency<Authentification>();
   String _nome, _url;
+  String _path = '...';
+  String _extension;
+  bool _hasValidMime = false;
 
-  SideMenu(){
+  SideMenu() {
     Firestore.instance
         .collection(auth.getUserId())
         .document("usuario")
@@ -22,6 +29,14 @@ class SideMenu extends StatelessWidget {
         _url = dado.data['imageUrl'];
       },
     );
+  }
+
+  void _openFileExplorer() async {
+      try {
+        _path = await FilePicker.getFilePath(type: FileType.ANY, fileExtension: _extension);
+      } catch (e) {
+        print("Unsupported operation" + e.toString());
+      }
   }
 
   Widget build(BuildContext context) {
@@ -57,8 +72,16 @@ class SideMenu extends StatelessWidget {
                     )
                   ],
                 ),
-                currentAccountPicture: ClipOval(
-                  child: Image.network(_url),
+                currentAccountPicture: new Container(
+                  decoration: new BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: new DecorationImage(
+                      fit: BoxFit.fill,
+                      image: NetworkImage(
+                        _url,
+                      ),
+                    ),
+                  ),
                 ),
               ),
               ListTile(
@@ -77,7 +100,7 @@ class SideMenu extends StatelessWidget {
                   Navigator.push(
                     context,
                     CupertinoPageRoute(
-                      builder: (context) => HomePage(),
+                      builder: (context) => HomeModule(),
                     ),
                   );
                 },
@@ -101,7 +124,7 @@ class SideMenu extends StatelessWidget {
                   Navigator.push(
                     context,
                     CupertinoPageRoute(
-                      builder: (context) => HomePage(),
+                      builder: (context) => SetoresModule(),
                     ),
                   );
                 },
@@ -121,14 +144,7 @@ class SideMenu extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    CupertinoPageRoute(
-                      builder: (context) => HomePage(),
-                    ),
-                  );
-                },
+                onTap: _openFileExplorer,
               ),
               Divider(
                 color: Theme.of(context).accentColor,
@@ -149,7 +165,7 @@ class SideMenu extends StatelessWidget {
                   Navigator.push(
                     context,
                     CupertinoPageRoute(
-                      builder: (context) => HomePage(),
+                      builder: (context) => ProfileModule(),
                     ),
                   );
                 },

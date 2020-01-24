@@ -1,11 +1,12 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:ifmaacessivel/src/pages/checklist/checklist_bloc.dart';
-import 'package:ifmaacessivel/src/pages/checklist/checklist_module.dart';
 import 'package:ifmaacessivel/src/shared/widgets/checklist_card.dart';
 import 'package:ifmaacessivel/src/shared/widgets/default_button.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ChecklistPage extends StatefulWidget {
   @override
@@ -15,6 +16,9 @@ class ChecklistPage extends StatefulWidget {
 class _ChecklistPageState extends State<ChecklistPage> {
   //final _CheckclistBloc = ChecklistModule.to.getBloc<ChecklistBloc>();
   int _selectedRadio;
+  String _path = '...';
+  String _extension;
+  bool _hasValidMime = false;
 
   @override
   void initState() {
@@ -86,14 +90,18 @@ class _ChecklistPageState extends State<ChecklistPage> {
               Icons.photo_camera,
             ),
             label: "Câmera",
-            onTap: () => print("photo"),
+            onTap: () async {
+              final File image = await ImagePicker.pickImage(source: ImageSource.camera);
+            },
           ),
           SpeedDialChild(
             child: Icon(
               Icons.photo_library,
             ),
             label: "Galeria",
-            onTap: () => print("library"),
+            onTap: () async {
+              final File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+            },
           )
         ],
       ),

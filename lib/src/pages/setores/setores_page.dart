@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ifmaacessivel/src/app/app_module.dart';
 import 'package:ifmaacessivel/src/auth/authentification.dart';
-import 'package:ifmaacessivel/src/pages/checklist/checklist_page.dart';
 import 'package:ifmaacessivel/src/shared/widgets/card_item.dart';
 import 'package:ifmaacessivel/src/shared/widgets/custom_appbar.dart';
 import 'package:ifmaacessivel/src/shared/widgets/float_page.dart';

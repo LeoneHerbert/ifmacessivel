@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ifmaacessivel/src/pages/checklist/checklist_page.dart';
+import 'package:ifmaacessivel/src/pages/checklist/checklist_module.dart';
 
 class FloatPage extends StatelessWidget {
   final StreamController<String> _streamController = StreamController<String>();
@@ -88,7 +88,7 @@ class FloatPage extends StatelessWidget {
                             Navigator.push(
                               context,
                               CupertinoPageRoute(
-                                builder: (context) => new ChecklistPage(),
+                                builder: (context) => new ChecklistModule(),
                               ),
                             );
                           },
