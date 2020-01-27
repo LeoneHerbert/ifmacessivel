@@ -6,7 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:ifmaacessivel/src/shared/widgets/checklist_card.dart';
 import 'package:ifmaacessivel/src/shared/widgets/default_button.dart';
+import 'package:ifmaacessivel/src/shared/widgets/pdf_viewer.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:pdf/widgets.dart' as pdfLib;
 
 class ChecklistPage extends StatefulWidget {
   @override
@@ -19,6 +22,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
   String _path = '...';
   String _extension;
   bool _hasValidMime = false;
+  final pdfLib.Document pdf = pdfLib.Document(deflate: zlib.encode);
+  var lista = ["11", "22", "33", "Oi"];
 
   @override
   void initState() {
@@ -30,6 +35,21 @@ class _ChecklistPageState extends State<ChecklistPage> {
     setState(() {
       _selectedRadio = val;
     });
+  }
+
+  _generatePdfAndView() async {
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+    String appDocPath = appDocDir.path;
+    final File file = File(appDocPath + "teste.pdf");
+    file.writeAsBytes(pdf.save());
+
+    Navigator.of(context).push(
+      CupertinoPageRoute(
+        builder: (_) => new PdfViewerPage(
+          path: appDocPath + "teste.pdf",
+        ),
+      ),
+    );
   }
 
   @override
@@ -50,6 +70,25 @@ class _ChecklistPageState extends State<ChecklistPage> {
             case ConnectionState.waiting:
               return new Text('Loading...');
             default:
+              pdf.addPage(
+                pdfLib.MultiPage(
+                  build: (context) => [
+                    pdfLib.Table.fromTextArray(
+                      context: context,
+                      data: <List<String>>[
+                        <String>[
+                          'DESCRIÇÃO  DE  ACORDO  COM  A NORMA  TÉCNICA/LEGISLAÇÃO',
+                          'Q',
+                          'SITUAÇÃO'
+                        ],
+                        ...snapshot.data.documents.map((item) =>
+                            [item.data['texto'], item.data['q'], "Não"])
+                      ],
+                    ),
+                  ],
+                ),
+              );
+
               return ListView(
                 children: <Widget>[
                   SingleChildScrollView(
@@ -73,7 +112,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: _generatePdfAndView,
                     ),
                   )
                 ],
@@ -91,7 +130,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
             ),
             label: "Câmera",
             onTap: () async {
-              final File image = await ImagePicker.pickImage(source: ImageSource.camera);
+              final File image =
+                  await ImagePicker.pickImage(source: ImageSource.camera);
             },
           ),
           SpeedDialChild(
@@ -100,7 +140,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
             ),
             label: "Galeria",
             onTap: () async {
-              final File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+              final File image =
+                  await ImagePicker.pickImage(source: ImageSource.gallery);
             },
           )
         ],
