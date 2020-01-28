@@ -14,7 +14,10 @@ class SetoresPage extends StatefulWidget {
 
 class _SetoresPageState extends State<SetoresPage> {
   Authentification auth = AppModule.to.getDependency<Authentification>();
-  String _nome, _url;
+  String _nome,
+      _url,
+      imageCard =
+          "https://firebasestorage.googleapis.com/v0/b/ifmacessivel-48fa8.appspot.com/o/default.jpg?alt=media&token=4c877c08-998e-49f9-a97c-2354ca38b555";
   List<DropdownMenuItem<String>> _dropDownMenuItems = new List();
 
   @override
@@ -33,7 +36,7 @@ class _SetoresPageState extends State<SetoresPage> {
     super.initState();
   }
 
-  void setDropdownList(){
+  void setDropdownList() {
     _dropDownMenuItems.add(
       new DropdownMenuItem(
         child: new Text('SELECIONE'),
@@ -42,22 +45,78 @@ class _SetoresPageState extends State<SetoresPage> {
 
     _dropDownMenuItems.add(
       new DropdownMenuItem(
-        value: 'Escada',
+        value: 'escada',
         child: new Text('ESCADA'),
       ),
     );
 
     _dropDownMenuItems.add(
       new DropdownMenuItem(
-        value: 'Estacionamento',
+        value: 'estacionamento',
         child: new Text('ESTACIONAMENTO'),
       ),
     );
 
     _dropDownMenuItems.add(
       new DropdownMenuItem(
-        value: 'Acesso à edificação',
+        value: 'acesso_a_edificacao',
         child: new Text('ACESSO À EDIFICAÇÃO'),
+      ),
+    );
+
+    _dropDownMenuItems.add(
+      new DropdownMenuItem(
+        value: 'circulacao_interna',
+        child: new Text('CIRCULAÇÃO  INTERNA'),
+      ),
+    );
+
+    _dropDownMenuItems.add(
+      new DropdownMenuItem(
+        value: 'esquadrias',
+        child: new Text('ESQUADRIAS'),
+      ),
+    );
+
+    _dropDownMenuItems.add(
+      new DropdownMenuItem(
+        value: 'banheiro',
+        child: new Text('BANHEIRO'),
+      ),
+    );
+
+    _dropDownMenuItems.add(
+      new DropdownMenuItem(
+        value: 'vestiarios',
+        child: new Text('VESTIÁRIOS'),
+      ),
+    );
+
+    _dropDownMenuItems.add(
+      new DropdownMenuItem(
+        value: 'biblioteca',
+        child: new Text('BIBLIOTECA'),
+      ),
+    );
+
+    _dropDownMenuItems.add(
+      new DropdownMenuItem(
+        value: 'auditorios',
+        child: new Text('AUDITÓRIOS  E SIMILARES'),
+      ),
+    );
+
+    _dropDownMenuItems.add(
+      new DropdownMenuItem(
+        value: 'restaurantes',
+        child: new Text('RESTAURANTES  E SIMILARES'),
+      ),
+    );
+
+    _dropDownMenuItems.add(
+      new DropdownMenuItem(
+        value: 'mobiliario',
+        child: new Text('MOBILIÁRIO'),
       ),
     );
   }
@@ -67,9 +126,9 @@ class _SetoresPageState extends State<SetoresPage> {
     return Scaffold(
       body: StreamBuilder<QuerySnapshot>(
         stream: Firestore.instance
-            .collection("criterios_de_acessibilidade")
-            .document("calcada")
-            .collection("geral")
+            .collection(auth.getUserId())
+            .document("setores")
+            .collection("setor")
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) return new Text('Error: ${snapshot.error}');
@@ -99,10 +158,15 @@ class _SetoresPageState extends State<SetoresPage> {
                   ),
                   SingleChildScrollView(
                     child: Column(
-                        children: snapshot.data.documents
-                            .map((document) => CardItem(
-                                document.documentID, document.data['texto']))
-                            .toList()),
+                      children: snapshot.data.documents
+                          .map(
+                            (document) => CardItem(
+                              imageCard,
+                              document.data['nome'],
+                            ),
+                          )
+                          .toList(),
+                    ),
                   )
                 ],
               );

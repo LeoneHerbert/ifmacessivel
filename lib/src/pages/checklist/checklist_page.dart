@@ -82,7 +82,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
                           'SITUAÇÃO'
                         ],
                         ...snapshot.data.documents.map((item) =>
-                            [item.data['texto'], item.data['q'], "Não"])
+                            [item.data['texto'], item.data['q'], item.data['situacao']])
                       ],
                     ),
                   ],

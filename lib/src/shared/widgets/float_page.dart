@@ -14,7 +14,6 @@ class FloatPage extends StatelessWidget {
   }
 
   void changedDropDownItem(String selectedItem) {
-    print(dropDownMenuItems[2].child);
     _statusSel = selectedItem;
     _streamController.sink.add(_statusSel);
     print(_statusSel);

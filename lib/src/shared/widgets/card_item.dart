@@ -14,12 +14,14 @@ class CardItem extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(16),
       child: SingleChildScrollView(
+        padding: EdgeInsets.only(right: 187),
         scrollDirection: Axis.horizontal,
         child: Row(
           children: <Widget>[
             Container(
               width: 100,
               height: 100,
+              alignment: Alignment.centerLeft,
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: NetworkImage(image),
