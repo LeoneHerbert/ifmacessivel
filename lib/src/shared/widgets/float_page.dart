@@ -53,11 +53,12 @@ class FloatPage extends StatelessWidget {
                     height: 30,
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Padding(
                         padding: EdgeInsets.only(
-                          left: 30,
-                          right: 20,
+                          left: 10,
+                          right: 10,
                         ),
                         child: RaisedButton(
                           child: Text(

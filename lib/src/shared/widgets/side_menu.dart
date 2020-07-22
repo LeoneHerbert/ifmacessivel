@@ -47,38 +47,46 @@ class SideMenu extends StatelessWidget {
           ListView(
             children: <Widget>[
               StreamBuilder<DocumentSnapshot>(
-                stream: Firestore.instance
-              .collection(AppModule.to.getDependency<Authentification>().getUserId())
-              .document("usuario")
-              .snapshots(),
-                builder: (context, snapshot) {
-                  return new UserAccountsDrawerHeader(
-                    accountName: new Text(snapshot.data['nome']),
-                    accountEmail: null,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Theme.of(context).accentColor,
-                          blurRadius: 5.0,
-                          spreadRadius: 2.0,
-                        )
-                      ],
-                    ),
-                    currentAccountPicture: new Container(
-                      decoration: new BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: new DecorationImage(
-                          fit: BoxFit.fill,
-                          image: NetworkImage(
-                            snapshot.data['imageUrl'],
+                  stream: Firestore.instance
+                      .collection(AppModule.to
+                          .getDependency<Authentification>()
+                          .getUserId())
+                      .document("usuario")
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError)
+                      return new Text('Error: ${snapshot.error}');
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.waiting:
+                        return new Text('Loading...');
+                      default:
+                        return new UserAccountsDrawerHeader(
+                          accountName: new Text(snapshot.data['nome']),
+                          accountEmail: null,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Theme.of(context).accentColor,
+                                blurRadius: 5.0,
+                                spreadRadius: 2.0,
+                              )
+                            ],
                           ),
-                        ),
-                      ),
-                    ),
-                  );
-                }
-              ),
+                          currentAccountPicture: new Container(
+                            decoration: new BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: new DecorationImage(
+                                fit: BoxFit.fill,
+                                image: NetworkImage(
+                                  snapshot.data['imageUrl'],
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                    }
+                  }),
               ListTile(
                 leading: Icon(
                   Icons.home,

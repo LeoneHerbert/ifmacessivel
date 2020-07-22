@@ -5,6 +5,7 @@ import 'package:ifmaacessivel/src/app/app_widget.dart';
 import 'package:ifmaacessivel/src/auth/authentification.dart';
 
 
+
 class AppModule extends ModuleWidget {
   @override
   List<Bloc> get blocs => [

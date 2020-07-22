@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   TextStyle text(cor) {
-    return TextStyle(color: cor, fontWeight: FontWeight.bold, fontSize: 25);
+    return TextStyle(color: cor, fontWeight: FontWeight.bold, fontSize: 23);
   }
 
   @override
@@ -82,6 +82,8 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               GestureDetector(
                 onTap: () {
@@ -94,15 +96,15 @@ class _HomePageState extends State<HomePage> {
                 },
                 child: Container(
                   margin: EdgeInsets.all(20),
-                  height: 170,
-                  width: 170,
+                  height: MediaQuery.of(context).size.width/2.5,
+                  width: MediaQuery.of(context).size.width/2.5,
                   decoration: box(),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Icon(
                         Icons.location_city,
-                        size: 100,
+                        size: MediaQuery.of(context).size.height/7,
                         color: Theme.of(context).accentColor,
                       ),
                       Text(
@@ -119,15 +121,15 @@ class _HomePageState extends State<HomePage> {
                 onTap: _openFileExplorer,
                 child: Container(
                   margin: EdgeInsets.all(10),
-                  height: 170,
-                  width: 170,
+                  height: MediaQuery.of(context).size.width/2.5,
+                  width: MediaQuery.of(context).size.width/2.5,
                   decoration: box(),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Icon(
                         Icons.folder,
-                        size: 100,
+                        size: MediaQuery.of(context).size.height/7,
                         color: Theme.of(context).accentColor,
                       ),
                       Text(
@@ -143,6 +145,8 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               GestureDetector(
                 onTap: () {
@@ -155,15 +159,15 @@ class _HomePageState extends State<HomePage> {
                 },
                 child: Container(
                   margin: EdgeInsets.all(20),
-                  height: 170,
-                  width: 170,
+                  height: MediaQuery.of(context).size.width/2.5,
+                  width: MediaQuery.of(context).size.width/2.5,
                   decoration: box(),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Icon(
                         Icons.person,
-                        size: 100,
+                        size: MediaQuery.of(context).size.height/7,
                         color: Theme.of(context).accentColor,
                       ),
                       Text(
@@ -183,15 +187,15 @@ class _HomePageState extends State<HomePage> {
                 },
                 child: Container(
                   margin: EdgeInsets.all(10),
-                  height: 170,
-                  width: 170,
+                  height: MediaQuery.of(context).size.width/2.5,
+                  width: MediaQuery.of(context).size.width/2.5,
                   decoration: box(),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Icon(
                         Icons.email,
-                        size: 100,
+                        size: MediaQuery.of(context).size.height/7,
                         color: Theme.of(context).accentColor,
                       ),
                       Text(

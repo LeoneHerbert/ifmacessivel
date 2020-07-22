@@ -85,9 +85,9 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
         Positioned(
-          height: 40,
+          height: MediaQuery.of(context).size.height / 18,
           width: 100,
-          top: 228,
+          top: MediaQuery.of(context).size.height / 2.9,
           left: 20,
           child: Container(
             padding: EdgeInsets.only(top: 5),
@@ -113,10 +113,10 @@ class _LoginPageState extends State<LoginPage> {
           child: Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.only(top: 265),
+            padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 2.5),
             child: Form(
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.height / 20, vertical: 0),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(

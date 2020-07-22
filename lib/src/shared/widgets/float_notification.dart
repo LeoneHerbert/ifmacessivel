@@ -17,7 +17,7 @@ class FloatNotification extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 10),
-              Text("Alteração no estoque!")
+              Text("Novo E-mail!")
             ],
           ),
         ),

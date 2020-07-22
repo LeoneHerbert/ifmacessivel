@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ifmaacessivel/src/app/app_module.dart';
 import 'package:ifmaacessivel/src/auth/authentification.dart';
+import 'package:ifmaacessivel/src/pages/checklist/checklist_module.dart';
 import 'package:ifmaacessivel/src/shared/widgets/card_item.dart';
 import 'package:ifmaacessivel/src/shared/widgets/custom_appbar.dart';
 import 'package:ifmaacessivel/src/shared/widgets/float_page.dart';
@@ -160,9 +161,17 @@ class _SetoresPageState extends State<SetoresPage> {
                     child: Column(
                       children: snapshot.data.documents
                           .map(
-                            (document) => CardItem(
-                              imageCard,
-                              document.data['nome'],
+                            (document) => FlatButton(
+                              child: CardItem(
+                                document.data['imageUrl'],
+                                document.data['nome'],
+                              ),
+                              onPressed: ()=> Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                  builder: (context) => new ChecklistModule(),
+                                ),
+                              ),
                             ),
                           )
                           .toList(),
