@@ -9,7 +9,7 @@ class AppWidget extends StatelessWidget {
     SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
 
     return MaterialApp(
-      title: 'Sistema de Estoque',
+      title: 'ifmaacessivel',
       theme: ThemeData(
         primaryColor: Color(0xFF004AA3),
         dividerColor: Color(0xFF658BB3),

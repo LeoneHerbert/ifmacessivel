@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
+import 'package:ifmaacessivel/src/models/questionario.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -9,21 +11,7 @@ import 'package:pdf/widgets.dart' as pw;
 Future<Uint8List> generateEscada(PdfPageFormat pageFormat) async {
   final lorem = pw.LoremText();
 
-  final questionarios = <Questionario>[
-    Questionario('1', 'Possui faixa livre para pedestre com largura mínima de 1,50m, sendo admissível 1,20m?', 0.4,'Não'),
-    Questionario('2', 'A inclinação transversal é de, no máximo, 3%?', 0.4, 'Não'),
-    Questionario('3', 'É nivelada com os lotes vizinhos?', 0.4, 'Não'),
-    Questionario('4', 'Os desníveis entre o lote e o nível da calçada são vencidos sempre no interior do lote?', 0.4, 'Não'),
-    Questionario('5', 'O nível da calçada respeita sempre o meio-fio instalado, sem sobreposição de piso ou descaracterização deste nível?', 0.4, 'Não'),
-    Questionario('6', 'A inclinação longitudinal da calçada acompanha sempre o greide da via?', 0.4, 'Não'),
-    Questionario('7', 'Os lotes e edificações localizam-se em ruas cuja inclinação da via é menor que 14%?', 0.4, 'Não'),
-    Questionario('8', 'Na ausência da linha guia (estacionamento, acessos, etc) existe sinalização com piso tátil (recomendado o direcional) para balizamento das pessoas com deficiência visual?', 0.4, 'Não'),
-    Questionario('9', 'Obstáculos aéreos, como marquises, placas, toldos e vegetação estão localizados a uma altura superior a 2.10m?', 0.4, 'Não'),
-    Questionario('10', 'É livre de obstáculos no piso que comprometa a rota acessível?', 0.4, 'Não'),
-  ];
-
   final escada = Escada(
-    questionarios: questionarios,
     baseColor: PdfColors.blue500,
     accentColor: PdfColors.blue500,
   );
@@ -33,12 +21,11 @@ Future<Uint8List> generateEscada(PdfPageFormat pageFormat) async {
 
 class Escada {
   Escada({
-    this.questionarios,
     this.baseColor,
     this.accentColor,
   });
 
-  final List<Questionario> questionarios;
+  static List<Questionario> questionarios;
   final PdfColor baseColor;
   final PdfColor accentColor;
 
@@ -50,11 +37,19 @@ class Escada {
 
   PdfColor get _accentTextColor =>
       baseColor.luminance < 0.5 ? _lightColor : _darkColor;
+  
+  double get _maximoTotal => questionarios.map<double>((questionario)=> questionario.q).reduce((a, b) => a + b);
 
-  double get _total =>
-      questionarios.map<double>((p) => p.q).reduce((a, b) => a + b);
-
-  double get _grandTotal => _total;
+  double valorAcessibilidade() {
+    double valorTotal = 0;
+    questionarios.forEach((questionario) {
+      if (questionario.situacao == 'Sim' || questionario.situacao == 'N/A') {
+        print(questionario.q);
+        valorTotal = valorTotal + questionario.q;
+      }
+    });
+    return valorTotal;
+  }
 
   PdfImage _logo;
 
@@ -314,11 +309,22 @@ class Escada {
                     fontSize: 14,
                     fontWeight: pw.FontWeight.bold,
                   ),
-                  child: pw.Row(
-                    mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                  child: pw.Column(
                     children: [
-                      pw.Text('Total:'),
-                      pw.Text(_formatCurrency(_grandTotal)),
+                      pw.Row(
+                        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                        children: [
+                          pw.Text('Total:'),
+                          pw.Text(_formatCurrency(valorAcessibilidade())),
+                        ],
+                      ),
+                      pw.Row(
+                          mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                        children: [
+                          pw.Text('Máximo Total:'),
+                          pw.Text(_formatCurrency(_maximoTotal)),
+                        ]
+                      )
                     ],
                   ),
                 ),
@@ -378,7 +384,7 @@ class Escada {
     const tableHeaders = [
       'ID      ',
       'Texto',
-      'Q        ',
+      'Q                    ',
       'Situação                     ',
     ];
 
@@ -430,39 +436,11 @@ class Escada {
 }
 
 String _formatCurrency(double amount) {
-  return '${amount.toStringAsFixed(2)}';
+  return '${amount.toStringAsFixed(2)}' + '%';
 }
 
 String _formatDate(DateTime date) {
   initializeDateFormatting('pt_BR');
   final format = DateFormat.yMMMMd('pt_BR');
   return format.format(date);
-}
-
-class Questionario {
-  const Questionario(
-    this.id,
-    this.texto,
-    this.q,
-    this.situacao,
-  );
-
-  final String id;
-  final String texto;
-  final double q;
-  final String situacao;
-
-  String getIndex(int index) {
-    switch (index) {
-      case 0:
-        return id;
-      case 1:
-        return texto;
-      case 2:
-        return _formatCurrency(q);
-      case 3:
-        return situacao;
-    }
-    return '';
-  }
 }

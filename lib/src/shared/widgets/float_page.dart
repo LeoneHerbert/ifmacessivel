@@ -85,12 +85,7 @@ class FloatPage extends StatelessWidget {
                             ),
                           ),
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              CupertinoPageRoute(
-                                builder: (context) => new ChecklistModule(),
-                              ),
-                            );
+                            
                           },
                         ),
                       ),

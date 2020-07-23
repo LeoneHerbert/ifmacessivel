@@ -4,7 +4,9 @@ import 'package:ifmaacessivel/src/pages/checklist/checklist_bloc.dart';
 import 'package:ifmaacessivel/src/pages/checklist/checklist_page.dart';
 
 class ChecklistModule extends ModuleWidget {
+  final String setor;
 
+  ChecklistModule(this.setor);
   @override
   List<Bloc> get blocs => [
     Bloc((i) => ChecklistBloc()),
@@ -15,7 +17,7 @@ class ChecklistModule extends ModuleWidget {
   ];
 
   @override
-  Widget get view => ChecklistPage();
+  Widget get view => ChecklistPage(setor);
 
   static Inject get to => Inject<ChecklistModule>.of();
 }

@@ -32,23 +32,4 @@ class Authentification {
     _currentUser = null;
   }
 
-  DocumentSnapshot getDocumentFromExcel(
-      String setor, String subSetor, String idSetor) {
-    try {
-      Firestore.instance
-          .collection("criterios_de_acessibilidade")
-          .document(setor)
-          .collection(subSetor)
-          .document(idSetor)
-          .snapshots()
-          .listen(
-        (dado) {
-          return dado;
-        },
-      );
-    } catch (e) {
-      throw e;
-    }
-    return null;
-  }
 }

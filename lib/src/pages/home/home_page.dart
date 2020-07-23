@@ -183,7 +183,7 @@ class _HomePageState extends State<HomePage> {
               GestureDetector(
                 onTap: () {
                   customLaunch(
-                      'mailto:reitoria');
+                      'mailto:gabinete@ifma.edu.br');
                 },
                 child: Container(
                   margin: EdgeInsets.all(10),

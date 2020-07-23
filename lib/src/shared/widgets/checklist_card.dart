@@ -1,102 +1,123 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class ChecklistCard extends StatelessWidget {
-  final String text;
+  final String id;
+  final String texto;
+  final String situacao;
+  final String setor;
 
   ChecklistCard(
-    this.text,
-  );
+    this.id, this.texto, this.situacao, this.setor
+  ){
+    _selectedRadio = situacao;
+    _streamController.sink.add(_selectedRadio);
+  }
    String _selectedRadio;
    final StreamController<String> _streamController = StreamController<String>();
+
+
 
   void _setSelectedRadio(String val) {
     _selectedRadio = val;
     _streamController.sink.add(_selectedRadio);
+    Firestore.instance
+        .collection("criterios_de_acessibilidade")
+        .document(setor)
+        .collection("geral").document(id).setData(<String, String>{
+          "id": id,
+          "texto": texto,
+          "situacao": _selectedRadio,
+    });
   }
-  
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<String>(
       stream: _streamController.stream,
       builder: (context, snapshot) {
-        return Container(
-          margin: EdgeInsets.all(10),
-          padding: EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
+        if (texto == null) ;
+        switch (snapshot.connectionState) {
+          case ConnectionState.waiting:
+          default:
+            return Container(
+              margin: EdgeInsets.all(10),
+              padding: EdgeInsets.all(20),
+              decoration: BoxDecoration(
                 color: Colors.white,
-                blurRadius: 2.0,
-              )
-            ],
-          ),
-          child: Column(
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Text(
-                      text,
-                      style: TextStyle(color: Colors.black, fontSize: 20),
-                    ),
-                  ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.white,
+                    blurRadius: 2.0,
+                  )
                 ],
               ),
-              SizedBox(height: 20,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Column(
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      Radio(
-                        value: "Sim",
-                        groupValue: _selectedRadio,
-                        activeColor: Colors.black,
-                        onChanged: _setSelectedRadio,
-                      ),
-                      Text(
-                        "Sim",
-                        style: TextStyle(color: Colors.black, fontSize: 18),
+                      Expanded(
+                        child: Text(
+                          texto,
+                          style: TextStyle(color: Colors.black, fontSize: 20),
+                        ),
                       ),
                     ],
                   ),
+                  SizedBox(height: 20,),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Radio(
-                        value: "Não",
-                        groupValue: _selectedRadio,
-                        activeColor: Colors.black,
-                        onChanged: _setSelectedRadio,
+                      Row(
+                        children: <Widget>[
+                          Radio(
+                            value: "Sim",
+                            groupValue: _selectedRadio,
+                            activeColor: Colors.black,
+                            onChanged: _setSelectedRadio,
+                          ),
+                          Text(
+                            "Sim",
+                            style: TextStyle(color: Colors.black, fontSize: 18),
+                          ),
+                        ],
                       ),
-                      Text(
-                        "Não",
-                        style: TextStyle(color: Colors.black, fontSize: 18),
+                      Row(
+                        children: <Widget>[
+                          Radio(
+                            value: "Não",
+                            groupValue: _selectedRadio,
+                            activeColor: Colors.black,
+                            onChanged: _setSelectedRadio,
+                          ),
+                          Text(
+                            "Não",
+                            style: TextStyle(color: Colors.black, fontSize: 18),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Radio(
+                            value: "N/A",
+                            groupValue: _selectedRadio,
+                            activeColor: Colors.black,
+                            onChanged: _setSelectedRadio,
+                          ),
+                          Text(
+                            "N/A",
+                            style: TextStyle(color: Colors.black, fontSize: 18),
+                          ),
+                        ],
                       ),
                     ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Radio(
-                        value: "N/A",
-                        groupValue: _selectedRadio,
-                        activeColor: Colors.black,
-                        onChanged: _setSelectedRadio,
-                      ),
-                      Text(
-                        "N/A",
-                        style: TextStyle(color: Colors.black, fontSize: 18),
-                      ),
-                    ],
-                  ),
+                  )
                 ],
-              )
-            ],
-          ),
-        );
+              ),
+            );
+        }
       }
     );
   }

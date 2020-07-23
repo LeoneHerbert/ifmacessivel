@@ -33,93 +33,7 @@ class _SetoresPageState extends State<SetoresPage> {
         _url = dado.data['imageUrl'];
       },
     );
-    setDropdownList();
     super.initState();
-  }
-
-  void setDropdownList() {
-    _dropDownMenuItems.add(
-      new DropdownMenuItem(
-        child: new Text('SELECIONE'),
-      ),
-    );
-
-    _dropDownMenuItems.add(
-      new DropdownMenuItem(
-        value: 'escada',
-        child: new Text('ESCADA'),
-      ),
-    );
-
-    _dropDownMenuItems.add(
-      new DropdownMenuItem(
-        value: 'estacionamento',
-        child: new Text('ESTACIONAMENTO'),
-      ),
-    );
-
-    _dropDownMenuItems.add(
-      new DropdownMenuItem(
-        value: 'acesso_a_edificacao',
-        child: new Text('ACESSO À EDIFICAÇÃO'),
-      ),
-    );
-
-    _dropDownMenuItems.add(
-      new DropdownMenuItem(
-        value: 'circulacao_interna',
-        child: new Text('CIRCULAÇÃO  INTERNA'),
-      ),
-    );
-
-    _dropDownMenuItems.add(
-      new DropdownMenuItem(
-        value: 'esquadrias',
-        child: new Text('ESQUADRIAS'),
-      ),
-    );
-
-    _dropDownMenuItems.add(
-      new DropdownMenuItem(
-        value: 'banheiro',
-        child: new Text('BANHEIRO'),
-      ),
-    );
-
-    _dropDownMenuItems.add(
-      new DropdownMenuItem(
-        value: 'vestiarios',
-        child: new Text('VESTIÁRIOS'),
-      ),
-    );
-
-    _dropDownMenuItems.add(
-      new DropdownMenuItem(
-        value: 'biblioteca',
-        child: new Text('BIBLIOTECA'),
-      ),
-    );
-
-    _dropDownMenuItems.add(
-      new DropdownMenuItem(
-        value: 'auditorios',
-        child: new Text('AUDITÓRIOS  E SIMILARES'),
-      ),
-    );
-
-    _dropDownMenuItems.add(
-      new DropdownMenuItem(
-        value: 'restaurantes',
-        child: new Text('RESTAURANTES  E SIMILARES'),
-      ),
-    );
-
-    _dropDownMenuItems.add(
-      new DropdownMenuItem(
-        value: 'mobiliario',
-        child: new Text('MOBILIÁRIO'),
-      ),
-    );
   }
 
   @override
@@ -161,17 +75,9 @@ class _SetoresPageState extends State<SetoresPage> {
                     child: Column(
                       children: snapshot.data.documents
                           .map(
-                            (document) => FlatButton(
-                              child: CardItem(
-                                document.data['imageUrl'],
-                                document.data['nome'],
-                              ),
-                              onPressed: ()=> Navigator.push(
-                                context,
-                                CupertinoPageRoute(
-                                  builder: (context) => new ChecklistModule(),
-                                ),
-                              ),
+                            (document) => CardItem(
+                              document.data['imageUrl'],
+                              document.data['nome'],
                             ),
                           )
                           .toList(),
@@ -184,10 +90,6 @@ class _SetoresPageState extends State<SetoresPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) => new FloatPage(_dropDownMenuItems),
-          );
         },
         child: Icon(
           Icons.add,
