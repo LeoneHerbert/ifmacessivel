@@ -14,7 +14,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   String _path = '...';
   String _extension;
-  bool _hasValidMime = false;
   TextEditingController _controller = new TextEditingController();
 
   Decoration box() {

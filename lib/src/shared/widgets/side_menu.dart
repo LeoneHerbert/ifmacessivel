@@ -5,17 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:ifmaacessivel/src/app/app_module.dart';
 import 'package:ifmaacessivel/src/auth/authentification.dart';
 import 'package:ifmaacessivel/src/pages/home/home_module.dart';
-import 'package:ifmaacessivel/src/pages/home/home_page.dart';
 import 'package:ifmaacessivel/src/pages/login/login_module.dart';
-import 'package:ifmaacessivel/src/pages/login/login_page.dart';
 import 'package:ifmaacessivel/src/pages/profile/profile_module.dart';
 import 'package:ifmaacessivel/src/pages/setores/setores_module.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+// ignore: must_be_immutable
 class SideMenu extends StatelessWidget {
-  String _nome, _url;
   String _path = '...';
   String _extension;
-  bool _hasValidMime = false;
 
   void _openFileExplorer() async {
     try {
@@ -23,6 +21,14 @@ class SideMenu extends StatelessWidget {
           type: FileType.ANY, fileExtension: _extension);
     } catch (e) {
       print("Unsupported operation" + e.toString());
+    }
+  }
+
+  void customLaunch(command) async {
+    if (await canLaunch(command)) {
+      await launch(command);
+    } else {
+      print(' could not launch $command');
     }
   }
 
@@ -188,12 +194,8 @@ class SideMenu extends StatelessWidget {
                       fontWeight: FontWeight.bold),
                 ),
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    CupertinoPageRoute(
-                      builder: (context) => HomePage(),
-                    ),
-                  );
+                  customLaunch(
+                      'mailto:gabinete@ifma.edu.br');
                 },
               ),
               Divider(

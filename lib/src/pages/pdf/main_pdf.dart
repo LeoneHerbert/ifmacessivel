@@ -11,7 +11,7 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
-import 'escada_pdf.dart';
+import 'calcada_pdf.dart';
 
 class MainPDF extends StatefulWidget {
 
@@ -40,16 +40,16 @@ class MainPDFtate extends State<MainPDF> with SingleTickerProviderStateMixin {
     final PrintingInfo info = await Printing.info();
 
     _myTabs = const <Tab>[
-      Tab(text: 'ESCADA'),
+      Tab(text: 'CALÇADA'),
     ];
 
     _tabGen = const <LayoutCallback>[
-      generateEscada,
+      generateCalcada,
 
     ];
 
     _tabUrl = const <String>[
-      'escada_pdf.dart',
+      'calcada_pdf.dart',
     ];
 
     _tabController = TabController(

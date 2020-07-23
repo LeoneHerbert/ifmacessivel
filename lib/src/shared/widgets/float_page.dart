@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ifmaacessivel/src/pages/checklist/checklist_module.dart';
 
+// ignore: must_be_immutable
 class FloatPage extends StatelessWidget {
   final StreamController<String> _streamController = StreamController<String>();
   final List<DropdownMenuItem<String>> dropDownMenuItems;

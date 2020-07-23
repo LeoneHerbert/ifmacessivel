@@ -3,10 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ifmaacessivel/src/app/app_module.dart';
 import 'package:ifmaacessivel/src/auth/authentification.dart';
-import 'package:ifmaacessivel/src/pages/checklist/checklist_module.dart';
 import 'package:ifmaacessivel/src/shared/widgets/card_item.dart';
 import 'package:ifmaacessivel/src/shared/widgets/custom_appbar.dart';
-import 'package:ifmaacessivel/src/shared/widgets/float_page.dart';
 
 class SetoresPage extends StatefulWidget {
   @override
@@ -15,11 +13,7 @@ class SetoresPage extends StatefulWidget {
 
 class _SetoresPageState extends State<SetoresPage> {
   Authentification auth = AppModule.to.getDependency<Authentification>();
-  String _nome,
-      _url,
-      imageCard =
-          "https://firebasestorage.googleapis.com/v0/b/ifmacessivel-48fa8.appspot.com/o/default.jpg?alt=media&token=4c877c08-998e-49f9-a97c-2354ca38b555";
-  List<DropdownMenuItem<String>> _dropDownMenuItems = new List();
+  String _nome, _url;
 
   @override
   void initState() {

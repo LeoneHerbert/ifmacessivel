@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:ifmaacessivel/src/models/questionario.dart';
 import 'package:intl/intl.dart';
@@ -8,19 +7,19 @@ import 'package:pdf/pdf.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:pdf/widgets.dart' as pw;
 
-Future<Uint8List> generateEscada(PdfPageFormat pageFormat) async {
+Future<Uint8List> generateCalcada(PdfPageFormat pageFormat) async {
   final lorem = pw.LoremText();
 
-  final escada = Escada(
+  final calcada = Calcada(
     baseColor: PdfColors.blue500,
     accentColor: PdfColors.blue500,
   );
 
-  return await escada.buildPdf(pageFormat);
+  return await calcada.buildPdf(pageFormat);
 }
 
-class Escada {
-  Escada({
+class Calcada {
+  Calcada({
     this.baseColor,
     this.accentColor,
   });
@@ -247,7 +246,7 @@ class Escada {
             height: 70,
             child: pw.FittedBox(
               child: pw.Text(
-                'Questionário Escada',
+                'Questionário Calçada',
                 style: pw.TextStyle(
                   color: baseColor,
                   fontWeight: pw.FontWeight.bold,

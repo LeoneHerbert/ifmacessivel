@@ -1,17 +1,16 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:ifmaacessivel/src/app/app_module.dart';
 import 'package:ifmaacessivel/src/models/questionario.dart';
-import 'package:ifmaacessivel/src/pages/pdf/escada_pdf.dart';
+import 'package:ifmaacessivel/src/pages/pdf/calcada_pdf.dart';
 import 'package:ifmaacessivel/src/pages/pdf/main_pdf.dart';
 import 'package:ifmaacessivel/src/shared/widgets/checklist_card.dart';
 import 'package:ifmaacessivel/src/shared/widgets/default_button.dart';
 import 'package:image_picker/image_picker.dart';
 
+// ignore: must_be_immutable
 class ChecklistPage extends StatefulWidget {
   String setor;
 
@@ -25,26 +24,10 @@ class ChecklistPage extends StatefulWidget {
 
 class _ChecklistPageState extends State<ChecklistPage> {
   final String setor;
-  int _selectedRadio;
-  String _path = '...';
-  String _extension;
-  bool _hasValidMime = false;
   List<Questionario> questionarios = [];
   List<DocumentSnapshot> documents;
 
   _ChecklistPageState(this.setor);
-
-  @override
-  void initState() {
-    _selectedRadio = 0;
-    super.initState();
-  }
-
-  void _setSelectedRadio(int val) {
-    setState(() {
-      _selectedRadio = val;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +75,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
                       ),
                       onPressed: () {
                         montaQuestionarios();
-                        Escada.questionarios = questionarios;
+                        Calcada.questionarios = questionarios;
                         Navigator.push(
                           context,
                           CupertinoPageRoute(
