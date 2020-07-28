@@ -39,7 +39,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
         stream: Firestore.instance
             .collection("criterios_de_acessibilidade")
             .document(setor)
-            .collection("geral")
+            .collection("itens")
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) return new Text('Error: ${snapshot.error}');
@@ -55,9 +55,11 @@ class _ChecklistPageState extends State<ChecklistPage> {
                       children: snapshot.data.documents
                           .map(
                             (document) => ChecklistCard(
+                                document.documentID,
                                 document.data['id'],
                                 document.data['texto'],
                                 document.data['situacao'],
+                                document.data['q'],
                                 setor),
                           )
                           .toList(),
@@ -125,7 +127,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
           (document) => Questionario(
             document.data['id'],
             document.data['texto'],
-            0.2,
+            document.data['q'],
             document.data['situacao'],
           ),
         )

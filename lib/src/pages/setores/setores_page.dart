@@ -35,9 +35,7 @@ class _SetoresPageState extends State<SetoresPage> {
     return Scaffold(
       body: StreamBuilder<QuerySnapshot>(
         stream: Firestore.instance
-            .collection(auth.getUserId())
-            .document("setores")
-            .collection("setor")
+            .collection("setores")
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasError) return new Text('Error: ${snapshot.error}');
@@ -72,6 +70,7 @@ class _SetoresPageState extends State<SetoresPage> {
                             (document) => CardItem(
                               document.data['imageUrl'],
                               document.data['nome'],
+                              document.data['itens'],
                             ),
                           )
                           .toList(),

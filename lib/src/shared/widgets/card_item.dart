@@ -5,10 +5,12 @@ import 'package:ifmaacessivel/src/pages/checklist/checklist_module.dart';
 class CardItem extends StatelessWidget {
   final String image;
   final String setor;
+  final String itens;
 
   const CardItem(
     this.image,
     this.setor,
+      this.itens
   );
 
   @override
@@ -50,7 +52,7 @@ class CardItem extends StatelessWidget {
                     height: 10,
                   ),
                   Text(
-                    "10 itens",
+                    itens,
                     style: TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.bold,

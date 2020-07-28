@@ -4,13 +4,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class ChecklistCard extends StatelessWidget {
+  final String idDocument;
   final String id;
   final String texto;
   final String situacao;
+  final double q;
   final String setor;
 
   ChecklistCard(
-    this.id, this.texto, this.situacao, this.setor
+    this.idDocument, this.id, this.texto, this.situacao, this.q, this.setor
   ){
     _selectedRadio = situacao;
     _streamController.sink.add(_selectedRadio);
@@ -26,10 +28,11 @@ class ChecklistCard extends StatelessWidget {
     Firestore.instance
         .collection("criterios_de_acessibilidade")
         .document(setor)
-        .collection("geral").document(id).setData(<String, String>{
+        .collection("itens").document(idDocument).setData(<String, dynamic>{
           "id": id,
           "texto": texto,
           "situacao": _selectedRadio,
+           "q": q
     });
   }
 
@@ -60,7 +63,7 @@ class ChecklistCard extends StatelessWidget {
                     children: <Widget>[
                       Expanded(
                         child: Text(
-                          texto,
+                          id + ' - ' + texto,
                           style: TextStyle(color: Colors.black, fontSize: 20),
                         ),
                       ),
