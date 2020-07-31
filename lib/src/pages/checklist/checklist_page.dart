@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:ifmaacessivel/src/models/questionario.dart';
-import 'package:ifmaacessivel/src/pages/pdf/calcada_pdf.dart';
+import 'package:ifmaacessivel/src/pages/pdf/setor_pdf.dart';
 import 'package:ifmaacessivel/src/pages/pdf/main_pdf.dart';
 import 'package:ifmaacessivel/src/shared/widgets/checklist_card.dart';
 import 'package:ifmaacessivel/src/shared/widgets/default_button.dart';
@@ -29,11 +29,12 @@ class _ChecklistPageState extends State<ChecklistPage> {
 
   _ChecklistPageState(this.setor);
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("CheckList"),
+        title: Text("Questionário"),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: Firestore.instance
@@ -77,7 +78,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
                       ),
                       onPressed: () {
                         montaQuestionarios();
-                        Calcada.questionarios = questionarios;
+                        Setor.questionarios = questionarios;
                         Navigator.push(
                           context,
                           CupertinoPageRoute(
@@ -129,6 +130,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
             document.data['texto'],
             document.data['q'],
             document.data['situacao'],
+            setor,
           ),
         )
         .toList(growable: true);

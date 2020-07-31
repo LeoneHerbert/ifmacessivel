@@ -7,24 +7,25 @@ import 'package:pdf/pdf.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:pdf/widgets.dart' as pw;
 
-Future<Uint8List> generateCalcada(PdfPageFormat pageFormat) async {
+Future<Uint8List> generateSetor(PdfPageFormat pageFormat) async {
   final lorem = pw.LoremText();
 
-  final calcada = Calcada(
+  final setor = Setor(
     baseColor: PdfColors.blue500,
     accentColor: PdfColors.blue500,
   );
 
-  return await calcada.buildPdf(pageFormat);
+  return await setor.buildPdf(pageFormat);
 }
 
-class Calcada {
-  Calcada({
+class Setor {
+  Setor({
     this.baseColor,
     this.accentColor,
   });
 
   static List<Questionario> questionarios;
+  String nome = questionarios[1].setor;
   final PdfColor baseColor;
   final PdfColor accentColor;
 
@@ -246,7 +247,7 @@ class Calcada {
             height: 70,
             child: pw.FittedBox(
               child: pw.Text(
-                'Questionário Calçada',
+                nome,
                 style: pw.TextStyle(
                   color: baseColor,
                   fontWeight: pw.FontWeight.bold,
@@ -381,10 +382,10 @@ class Calcada {
 
   pw.Widget _contentTable(pw.Context context) {
     const tableHeaders = [
-      'ID      ',
+      ' ID          ',
       'Texto',
-      'Q                    ',
-      'Situação                     ',
+      'Q                               ',
+      'Situação                                       ',
     ];
 
     return pw.Table.fromTextArray(
@@ -395,7 +396,7 @@ class Calcada {
         color: baseColor,
       ),
       headerHeight: 25,
-      cellHeight: 40,
+      cellHeight: 50,
       cellAlignments: {
         0: pw.Alignment.center,
         1: pw.Alignment.centerLeft,

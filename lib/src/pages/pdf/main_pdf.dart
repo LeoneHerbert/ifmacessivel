@@ -1,17 +1,15 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:ifmaacessivel/src/models/questionario.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
-import 'calcada_pdf.dart';
+import 'setor_pdf.dart';
 
 class MainPDF extends StatefulWidget {
 
@@ -40,16 +38,14 @@ class MainPDFtate extends State<MainPDF> with SingleTickerProviderStateMixin {
     final PrintingInfo info = await Printing.info();
 
     _myTabs = const <Tab>[
-      Tab(text: 'CALÇADA'),
+      Tab(text: 'SETOR'),
     ];
-
     _tabGen = const <LayoutCallback>[
-      generateCalcada,
-
+      generateSetor,
     ];
 
     _tabUrl = const <String>[
-      'calcada_pdf.dart',
+      'setor_pdf.dart',
     ];
 
     _tabController = TabController(

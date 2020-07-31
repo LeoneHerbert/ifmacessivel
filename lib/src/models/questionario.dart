@@ -4,12 +4,14 @@ class Questionario {
       this.texto,
       this.q,
       this.situacao,
+      this.setor,
       );
 
   final String id;
   final String texto;
   final double q;
   final String situacao;
+  final String setor;
 
   String getIndex(int index) {
     switch (index) {
