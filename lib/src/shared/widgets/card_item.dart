@@ -45,7 +45,7 @@ class CardItem extends StatelessWidget {
                     setor,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 22,
+                      fontSize: 18,
                     ),
                   ),
                   SizedBox(

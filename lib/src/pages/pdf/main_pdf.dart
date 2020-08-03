@@ -69,7 +69,7 @@ class MainPDFtate extends State<MainPDF> with SingleTickerProviderStateMixin {
 
     scaffold.showSnackBar(
       const SnackBar(
-        content: Text('Document printed successfully'),
+        content: Text('Documento impresso com sucesso!'),
       ),
     );
   }
@@ -79,7 +79,7 @@ class MainPDFtate extends State<MainPDF> with SingleTickerProviderStateMixin {
 
     scaffold.showSnackBar(
       const SnackBar(
-        content: Text('Document shared successfully'),
+        content: Text('Documento compartilhado com sucesso!'),
       ),
     );
   }

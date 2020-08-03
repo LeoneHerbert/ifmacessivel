@@ -4,10 +4,12 @@ import 'package:ifmaacessivel/src/app/app_bloc.dart';
 import 'package:ifmaacessivel/src/app/app_widget.dart';
 import 'package:ifmaacessivel/src/auth/authentification.dart';
 import 'package:ifmaacessivel/src/models/questionario.dart';
+import 'package:ifmaacessivel/src/models/setor.dart';
 
 
 
 class AppModule extends ModuleWidget {
+  static List<Setor> setores;
   @override
   List<Bloc> get blocs => [
         Bloc((i) => AppBloc()),

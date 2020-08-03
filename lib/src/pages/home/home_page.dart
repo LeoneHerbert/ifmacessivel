@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ifmaacessivel/src/app/app_module.dart';
+import 'package:ifmaacessivel/src/models/setor.dart';
 import 'package:ifmaacessivel/src/pages/profile/profile_module.dart';
 import 'package:ifmaacessivel/src/pages/setores/setores_module.dart';
 import 'package:ifmaacessivel/src/shared/widgets/side_menu.dart';
@@ -76,141 +79,153 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       drawer: new SideMenu(),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    CupertinoPageRoute(
-                      builder: (context) => SetoresModule(),
+      body: StreamBuilder<QuerySnapshot>(
+          stream: Firestore.instance.collection("setores").snapshots(),
+          builder: (context, snapshot) {
+            AppModule.setores = snapshot.data.documents
+                .map(
+                  (document) => Setor(
+                    document.data['nome'],
+                    document.data['imageUrl'],
+                    document.data['itens'],
+                  ),
+                )
+                .toList(growable: true);
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (context) => SetoresModule(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        margin: EdgeInsets.all(20),
+                        height: MediaQuery.of(context).size.width / 2.5,
+                        width: MediaQuery.of(context).size.width / 2.5,
+                        decoration: box(),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(
+                              Icons.location_city,
+                              size: MediaQuery.of(context).size.height / 7,
+                              color: Theme.of(context).accentColor,
+                            ),
+                            Text(
+                              'Setores',
+                              style: text(
+                                Theme.of(context).accentColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                  );
-                },
-                child: Container(
-                  margin: EdgeInsets.all(20),
-                  height: MediaQuery.of(context).size.width/2.5,
-                  width: MediaQuery.of(context).size.width/2.5,
-                  decoration: box(),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(
-                        Icons.location_city,
-                        size: MediaQuery.of(context).size.height/7,
-                        color: Theme.of(context).accentColor,
-                      ),
-                      Text(
-                        'Setores',
-                        style: text(
-                          Theme.of(context).accentColor,
+                    GestureDetector(
+                      onTap: _openFileExplorer,
+                      child: Container(
+                        margin: EdgeInsets.all(10),
+                        height: MediaQuery.of(context).size.width / 2.5,
+                        width: MediaQuery.of(context).size.width / 2.5,
+                        decoration: box(),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(
+                              Icons.folder,
+                              size: MediaQuery.of(context).size.height / 7,
+                              color: Theme.of(context).accentColor,
+                            ),
+                            Text(
+                              'Documentos',
+                              style: text(
+                                Theme.of(context).accentColor,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: _openFileExplorer,
-                child: Container(
-                  margin: EdgeInsets.all(10),
-                  height: MediaQuery.of(context).size.width/2.5,
-                  width: MediaQuery.of(context).size.width/2.5,
-                  decoration: box(),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(
-                        Icons.folder,
-                        size: MediaQuery.of(context).size.height/7,
-                        color: Theme.of(context).accentColor,
-                      ),
-                      Text(
-                        'Documentos',
-                        style: text(
-                          Theme.of(context).accentColor,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    CupertinoPageRoute(
-                      builder: (context) => ProfileModule(),
                     ),
-                  );
-                },
-                child: Container(
-                  margin: EdgeInsets.all(20),
-                  height: MediaQuery.of(context).size.width/2.5,
-                  width: MediaQuery.of(context).size.width/2.5,
-                  decoration: box(),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(
-                        Icons.person,
-                        size: MediaQuery.of(context).size.height/7,
-                        color: Theme.of(context).accentColor,
-                      ),
-                      Text(
-                        'Perfil',
-                        style: text(
-                          Theme.of(context).accentColor,
+                  ],
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (context) => ProfileModule(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        margin: EdgeInsets.all(20),
+                        height: MediaQuery.of(context).size.width / 2.5,
+                        width: MediaQuery.of(context).size.width / 2.5,
+                        decoration: box(),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(
+                              Icons.person,
+                              size: MediaQuery.of(context).size.height / 7,
+                              color: Theme.of(context).accentColor,
+                            ),
+                            Text(
+                              'Perfil',
+                              style: text(
+                                Theme.of(context).accentColor,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  customLaunch(
-                      'mailto:gabinete@ifma.edu.br');
-                },
-                child: Container(
-                  margin: EdgeInsets.all(10),
-                  height: MediaQuery.of(context).size.width/2.5,
-                  width: MediaQuery.of(context).size.width/2.5,
-                  decoration: box(),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(
-                        Icons.email,
-                        size: MediaQuery.of(context).size.height/7,
-                        color: Theme.of(context).accentColor,
-                      ),
-                      Text(
-                        'E-mail',
-                        style: text(
-                          Theme.of(context).accentColor,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        customLaunch('mailto:gabinete@ifma.edu.br');
+                      },
+                      child: Container(
+                        margin: EdgeInsets.all(10),
+                        height: MediaQuery.of(context).size.width / 2.5,
+                        width: MediaQuery.of(context).size.width / 2.5,
+                        decoration: box(),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(
+                              Icons.email,
+                              size: MediaQuery.of(context).size.height / 7,
+                              color: Theme.of(context).accentColor,
+                            ),
+                            Text(
+                              'E-mail',
+                              style: text(
+                                Theme.of(context).accentColor,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          )
-        ],
-      ),
+                    ),
+                  ],
+                )
+              ],
+            );
+          }),
     );
   }
 }

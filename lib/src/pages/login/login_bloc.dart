@@ -57,6 +57,10 @@ class LoginBloc extends BlocBase with LoginValidator {
     }
   }
 
+  void loginFalha(){
+    _estadoController.add(Estado.OCIOSO);
+  }
+
   @override
   void dispose() {
     _emailController.close();

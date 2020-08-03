@@ -201,9 +201,6 @@ class SideMenu extends StatelessWidget {
               Divider(
                 color: Theme.of(context).accentColor,
               ),
-              SizedBox(
-                height: 70,
-              ),
               ListTile(
                 leading: Icon(
                   Icons.exit_to_app,

@@ -11,13 +11,13 @@ class FloatNotification extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                "Notifição",
+                "Erro",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
               ),
               SizedBox(height: 10),
-              Text("Novo E-mail!")
+              Text("Não foi possível realizar o login. Tente novamente!")
             ],
           ),
         ),

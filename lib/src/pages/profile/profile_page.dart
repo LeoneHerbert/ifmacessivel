@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:ifmaacessivel/src/app/app_module.dart';
 import 'package:ifmaacessivel/src/auth/authentification.dart';
 import 'package:ifmaacessivel/src/shared/widgets/float_notification.dart';
+import 'package:ifmaacessivel/src/shared/widgets/float_page.dart';
 
 class ProfilePage extends StatefulWidget {
   ProfilePage({Key key, this.title}) : super(key: key);
@@ -20,48 +21,6 @@ class _ProfilePageState extends State<ProfilePage> {
       appBar: AppBar(
         centerTitle: true,
         title: Text("Perfil"),
-        actions: <Widget>[
-          Stack(
-            children: <Widget>[
-              Container(
-                child: IconButton(
-                  icon: Icon(
-                    Icons.notifications,
-                    size: 35,
-                  ),
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) => FloatNotification());
-                  },
-                ),
-              ),
-              IconButton(
-                padding: EdgeInsets.only(left: 20, bottom: 12),
-                icon: Icon(
-                  Icons.brightness_1,
-                  color: Colors.red,
-                  size: 17,
-                ),
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) => FloatNotification());
-                },
-              ),
-              Container(
-                padding: EdgeInsets.only(left: 31, top: 12),
-                child: Text(
-                  "1",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 10,
-                  ),
-                ),
-              ),
-            ],
-          )
-        ],
       ),
       body: StreamBuilder<DocumentSnapshot>(
         stream: Firestore.instance
@@ -102,13 +61,19 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ),
                       ),
+                      /*
                       Container(
                         margin: EdgeInsets.only(right: 10),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: <Widget>[
                             GestureDetector(
-                              onTap: () {},
+                              onTap: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) => FloatPage());
+
+                              },
                               child: Icon(
                                 Icons.settings,
                                 color: Colors.white,
@@ -117,7 +82,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             )
                           ],
                         ),
-                      ),
+                      ),*/
                     ],
                   ),
                 ),
@@ -141,7 +106,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         height: 16,
                       ),
                       Text(
-                        "Encarregado",
+                        "Encarregado(a)",
                         style: Theme.of(context).textTheme.title,
                       ),
                       SizedBox(

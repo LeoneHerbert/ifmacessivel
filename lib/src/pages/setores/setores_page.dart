@@ -1,10 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ifmaacessivel/src/app/app_module.dart';
-import 'package:ifmaacessivel/src/auth/authentification.dart';
+import 'package:ifmaacessivel/src/models/debouncer.dart';
+import 'package:ifmaacessivel/src/models/setor.dart';
+import 'package:ifmaacessivel/src/pages/setores/setores_bloc.dart';
+import 'package:ifmaacessivel/src/pages/setores/setores_module.dart';
 import 'package:ifmaacessivel/src/shared/widgets/card_item.dart';
-import 'package:ifmaacessivel/src/shared/widgets/custom_appbar.dart';
 
 class SetoresPage extends StatefulWidget {
   @override
@@ -12,82 +13,74 @@ class SetoresPage extends StatefulWidget {
 }
 
 class _SetoresPageState extends State<SetoresPage> {
-  Authentification auth = AppModule.to.getDependency<Authentification>();
-  String _nome, _url;
+  SetoresBloc _setoresBloc = SetoresModule.to.getBloc<SetoresBloc>();
+  final _debouncer = Debouncer(milliseconds: 100);
+
+  List<Setor> setores = List();
+  List<Setor> filteredSetores = List();
 
   @override
   void initState() {
-    Firestore.instance
-        .collection(auth.getUserId())
-        .document("usuario")
-        .snapshots()
-        .listen(
-      (dado) {
-        _nome = dado.data['nome'];
-        _url = dado.data['imageUrl'];
-      },
-    );
     super.initState();
+    setores = AppModule.setores;
+    filteredSetores = setores;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder<QuerySnapshot>(
-        stream: Firestore.instance
-            .collection("setores")
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) return new Text('Error: ${snapshot.error}');
-          switch (snapshot.connectionState) {
-            case ConnectionState.waiting:
-              return new Text('Loading...');
-            default:
-              return ListView(
-                children: <Widget>[
-                  new CustomAppBar(_nome, _url),
-                  Padding(
-                    padding: EdgeInsets.all(16.0),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(16),
-                    child: Row(
-                      children: <Widget>[
-                        Text(
-                          "Setores",
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  SingleChildScrollView(
-                    child: Column(
-                      children: snapshot.data.documents
-                          .map(
-                            (document) => CardItem(
-                              document.data['imageUrl'],
-                              document.data['nome'],
-                              document.data['itens'],
-                            ),
-                          )
-                          .toList(),
-                    ),
-                  )
-                ],
-              );
-          }
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-        },
-        child: Icon(
-          Icons.add,
-          color: Theme.of(context).highlightColor,
+      appBar: AppBar(
+        title: Text(
+          'Setores',
         ),
+      ),
+      body: Column(
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 10),
+            color: Colors.white,
+            child: TextField(
+              textAlignVertical: TextAlignVertical.center,
+              decoration: InputDecoration(
+                fillColor: Colors.white,
+                suffixIcon: Icon(
+                  Icons.search,
+                  color: Theme.of(context).primaryColor,
+                ),
+                hintText: 'Buscar setor',
+              ),
+              onChanged: (string) {
+                _debouncer.run(
+                  () {
+                    setState(
+                      () {
+                        filteredSetores = setores
+                            .where(
+                              (setor) => (setor.nome
+                                  .toLowerCase()
+                                  .contains(string.toLowerCase())),
+                            )
+                            .toList();
+                      },
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: filteredSetores.length,
+              itemBuilder: (BuildContext context, int index) {
+                return CardItem(
+                  filteredSetores[index].imageUrl,
+                  filteredSetores[index].nome,
+                  filteredSetores[index].itens,
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

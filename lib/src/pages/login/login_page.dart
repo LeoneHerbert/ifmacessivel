@@ -50,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget _loginShape() {
     return StreamBuilder<Estado>(
       stream: _loginBloc.outEstado,
-      initialData: Estado.FALHA,
+      initialData: Estado.OCIOSO,
       builder: (context, snapshot) {
         switch (snapshot.data) {
           case Estado.CARREGANDO:
@@ -62,9 +62,11 @@ class _LoginPageState extends State<LoginPage> {
             );
           case Estado.FALHA:
           case Estado.NAUTORIZADO:
-            return _loginBuilder();
+            return _loginError();
             break;
           case Estado.OCIOSO:
+            return _loginBuilder();
+            break;
           case Estado.SUCESSO:
             Container();
         }
@@ -113,10 +115,13 @@ class _LoginPageState extends State<LoginPage> {
           child: Container(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 2.5),
+            padding:
+                EdgeInsets.only(top: MediaQuery.of(context).size.height / 2.5),
             child: Form(
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.height / 20, vertical: 0),
+                padding: EdgeInsets.symmetric(
+                    horizontal: MediaQuery.of(context).size.height / 20,
+                    vertical: 0),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
@@ -159,36 +164,27 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                     SizedBox(
-                      height: 20,
-                    ),
-                    Text(
-                      "Esqueceu sua senha? Clique aqui.",
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
+                      height: 40,
                     ),
                     StreamBuilder<bool>(
-                        stream: _loginBloc.outSubmitValido,
-                        builder: (context, snapshot) {
-                          return DefaultButton(
-                            child: Text(
-                              "Entrar",
-                              style: TextStyle(
-                                color: Theme.of(context).highlightColor,
-                                fontWeight: FontWeight.bold,
-                              ),
+                      stream: _loginBloc.outSubmitValido,
+                      builder: (context, snapshot) {
+                        return DefaultButton(
+                          child: Text(
+                            "Entrar",
+                            style: TextStyle(
+                              color: Theme.of(context).highlightColor,
+                              fontWeight: FontWeight.bold,
                             ),
-                            onPressed: snapshot.hasData
-                                ? () async {
-                                    _loginBloc.submit();
-                                  }
-                                : null,
-                          );
-                        })
+                          ),
+                          onPressed: snapshot.hasData
+                              ? () async {
+                                  _loginBloc.submit();
+                                }
+                              : null,
+                        );
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -196,6 +192,86 @@ class _LoginPageState extends State<LoginPage> {
           ),
         )
       ],
+    );
+  }
+
+  Widget _loginError() {
+    return Container(
+      color: Colors.grey,
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            width: MediaQuery.of(context).size.width / 1.5,
+            height: MediaQuery.of(context).size.height / 4,
+            color: Colors.white,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      'Erro',
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25,
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Icon(
+                      Icons.error_outline,
+                      color: Colors.red,
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 25,
+                ),
+                Text(
+                  'Dados incorretos!',
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: 10,
+                        right: 10,
+                      ),
+                      child: RaisedButton(
+                        child: Text(
+                          "Tente novamente",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        onPressed: () {
+                          _loginBloc.loginFalha();
+                          _loginBuilder();
+                        },
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }
