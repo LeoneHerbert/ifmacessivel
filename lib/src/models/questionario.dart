@@ -1,3 +1,5 @@
+import 'dart:io';
+
 class Questionario {
   const Questionario(
       this.id,
@@ -5,6 +7,7 @@ class Questionario {
       this.q,
       this.situacao,
       this.setor,
+      this.image,
       );
 
   final String id;
@@ -12,6 +15,7 @@ class Questionario {
   final double q;
   final String situacao;
   final String setor;
+  final File image;
 
   String getIndex(int index) {
     switch (index) {

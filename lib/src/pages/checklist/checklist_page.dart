@@ -8,6 +8,7 @@ import 'package:ifmaacessivel/src/pages/pdf/setor_pdf.dart';
 import 'package:ifmaacessivel/src/pages/pdf/main_pdf.dart';
 import 'package:ifmaacessivel/src/shared/widgets/checklist_card.dart';
 import 'package:ifmaacessivel/src/shared/widgets/default_button.dart';
+import 'package:ifmaacessivel/src/shared/widgets/float_notification.dart';
 import 'package:image_picker/image_picker.dart';
 
 // ignore: must_be_immutable
@@ -24,14 +25,15 @@ class ChecklistPage extends StatefulWidget {
 
 class _ChecklistPageState extends State<ChecklistPage> {
   final String setor;
+  File image;
   List<Questionario> questionarios = [];
   List<DocumentSnapshot> documents;
 
   _ChecklistPageState(this.setor);
 
-
   @override
   Widget build(BuildContext context) {
+    print("PATH DA IMAGEM");
     return Scaffold(
       appBar: AppBar(
         title: Text("Questionário"),
@@ -77,14 +79,23 @@ class _ChecklistPageState extends State<ChecklistPage> {
                         ),
                       ),
                       onPressed: () {
-                        montaQuestionarios();
-                        Setor.questionarios = questionarios;
-                        Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => MainPDF(),
-                          ),
-                        );
+                        if (image == null) {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return FloatNotification();
+                            },
+                          );
+                        } else {
+                          montaQuestionarios();
+                          Setor.questionarios = questionarios;
+                          Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) => MainPDF(),
+                            ),
+                          );
+                        }
                       },
                     ),
                   )
@@ -103,8 +114,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
             ),
             label: "Câmera",
             onTap: () async {
-              final File image =
-                  await ImagePicker.pickImage(source: ImageSource.camera);
+              image = await ImagePicker.pickImage(source: ImageSource.camera);
+              print(image.path);
             },
           ),
           SpeedDialChild(
@@ -113,8 +124,8 @@ class _ChecklistPageState extends State<ChecklistPage> {
             ),
             label: "Galeria",
             onTap: () async {
-              final File image =
-                  await ImagePicker.pickImage(source: ImageSource.gallery);
+              image = await ImagePicker.pickImage(source: ImageSource.gallery);
+              print(image.path);
             },
           )
         ],
@@ -131,6 +142,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
             document.data['q'],
             document.data['situacao'],
             setor,
+            image,
           ),
         )
         .toList(growable: true);

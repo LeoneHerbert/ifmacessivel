@@ -10,14 +10,8 @@ class FloatNotification extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
-                "Erro",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
               SizedBox(height: 10),
-              Text("Não foi possível realizar o login. Tente novamente!")
+              Text("Insira uma foto do setor!")
             ],
           ),
         ),

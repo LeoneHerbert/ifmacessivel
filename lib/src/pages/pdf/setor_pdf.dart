@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/services.dart';
@@ -26,6 +27,7 @@ class Setor {
 
   static List<Questionario> questionarios;
   String nome = questionarios[1].setor;
+  File image = questionarios[1].image;
   final PdfColor baseColor;
   final PdfColor accentColor;
 
@@ -37,8 +39,10 @@ class Setor {
 
   PdfColor get _accentTextColor =>
       baseColor.luminance < 0.5 ? _lightColor : _darkColor;
-  
-  double get _maximoTotal => questionarios.map<double>((questionario)=> questionario.q).reduce((a, b) => a + b);
+
+  double get _maximoTotal => questionarios
+      .map<double>((questionario) => questionario.q)
+      .reduce((a, b) => a + b);
 
   double valorAcessibilidade() {
     double valorTotal = 0;
@@ -84,6 +88,7 @@ class Setor {
           _contentFooter(context),
           pw.SizedBox(height: 20),
           _termsAndConditions(context),
+          _imagePdf(doc),
         ],
       ),
     );
@@ -320,11 +325,10 @@ class Setor {
                       ),
                       pw.Row(
                           mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                        children: [
-                          pw.Text('Máximo Total:'),
-                          pw.Text(_formatCurrency(_maximoTotal)),
-                        ]
-                      )
+                          children: [
+                            pw.Text('Máximo Total:'),
+                            pw.Text(_formatCurrency(_maximoTotal)),
+                          ])
                     ],
                   ),
                 ),
@@ -377,6 +381,32 @@ class Setor {
           child: pw.SizedBox(),
         ),
       ],
+    );
+  }
+
+  pw.Widget _imagePdf(pw.Document doc) {
+    final pdfImage = PdfImage.file(
+      doc.document,
+      bytes: File(image.path).readAsBytesSync(),
+    );
+    return pw.Container(
+      child: pw.Column(
+        children: [
+          pw.SizedBox(height: 5),
+          pw.Text(
+            "Foto do Setor",
+            style: pw.TextStyle(
+              color: baseColor,
+              fontWeight: pw.FontWeight.bold,
+              fontSize: 30,
+            ),
+          ),
+          pw.SizedBox(height: 50),
+          pw.Center(
+            child: pw.Image(pdfImage),
+          )
+        ],
+      ),
     );
   }
 
