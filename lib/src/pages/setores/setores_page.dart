@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ifmaacessivel/src/app/app_module.dart';
 import 'package:ifmaacessivel/src/models/debouncer.dart';
+import 'package:ifmaacessivel/src/models/relatorio.dart';
 import 'package:ifmaacessivel/src/models/setor.dart';
+import 'package:ifmaacessivel/src/pages/pdf/relatorio_geral/relatorio_geral_pdf.dart';
 import 'package:ifmaacessivel/src/pages/setores/setores_bloc.dart';
 import 'package:ifmaacessivel/src/pages/setores/setores_module.dart';
 import 'package:ifmaacessivel/src/shared/widgets/card_item.dart';
@@ -13,7 +15,7 @@ class SetoresPage extends StatefulWidget {
 }
 
 class _SetoresPageState extends State<SetoresPage> {
-  SetoresBloc _setoresBloc = SetoresModule.to.getBloc<SetoresBloc>();
+  bool loading;
   final _debouncer = Debouncer(milliseconds: 100);
 
   List<Setor> setores = List();
@@ -24,6 +26,13 @@ class _SetoresPageState extends State<SetoresPage> {
     super.initState();
     setores = AppModule.setores;
     filteredSetores = setores;
+    loading = true;
+  }
+
+  Widget _mensagem(bool state) {
+    if (state) {
+      return Text('Setor não encontrado');
+    } else {}
   }
 
   @override
@@ -54,6 +63,7 @@ class _SetoresPageState extends State<SetoresPage> {
                   () {
                     setState(
                       () {
+                        loading = false;
                         filteredSetores = setores
                             .where(
                               (setor) => (setor.nome
@@ -81,6 +91,18 @@ class _SetoresPageState extends State<SetoresPage> {
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            CupertinoPageRoute(
+              builder: (context) => RelatorioGeralPDF(),
+            ),
+          );
+        },
+        child: Icon(Icons.picture_as_pdf),
+        backgroundColor: Theme.of(context).primaryColor,
       ),
     );
   }

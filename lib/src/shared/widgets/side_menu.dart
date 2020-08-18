@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ifmaacessivel/src/app/app_module.dart';
 import 'package:ifmaacessivel/src/auth/authentification.dart';
+import 'package:ifmaacessivel/src/models/user.dart';
 import 'package:ifmaacessivel/src/pages/home/home_module.dart';
 import 'package:ifmaacessivel/src/pages/login/login_module.dart';
 import 'package:ifmaacessivel/src/pages/profile/profile_module.dart';
@@ -12,17 +13,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 // ignore: must_be_immutable
 class SideMenu extends StatelessWidget {
-  String _path = '...';
-  String _extension;
-
-  void _openFileExplorer() async {
-    try {
-      _path = await FilePicker.getFilePath(
-          type: FileType.ANY, fileExtension: _extension);
-    } catch (e) {
-      print("Unsupported operation" + e.toString());
-    }
-  }
+  String image =
+      "https://firebasestorage.googleapis.com/v0/b/ifmacessivel-48fa8.appspot.com/o/default_image.png?alt=media&token=e7f0a050-f7cd-4ab5-8ff0-6ecf2cf78f8f";
 
   void customLaunch(command) async {
     if (await canLaunch(command)) {
@@ -53,46 +45,47 @@ class SideMenu extends StatelessWidget {
           ListView(
             children: <Widget>[
               StreamBuilder<DocumentSnapshot>(
-                  stream: Firestore.instance
-                      .collection(AppModule.to
-                          .getDependency<Authentification>()
-                          .getUserId())
-                      .document("usuario")
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError)
-                      return new Text('Error: ${snapshot.error}');
-                    switch (snapshot.connectionState) {
-                      case ConnectionState.waiting:
-                        return new Text('Loading...');
-                      default:
-                        return new UserAccountsDrawerHeader(
-                          accountName: new Text(snapshot.data['nome']),
-                          accountEmail: null,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColor,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Theme.of(context).accentColor,
-                                blurRadius: 5.0,
-                                spreadRadius: 2.0,
-                              )
-                            ],
-                          ),
-                          currentAccountPicture: new Container(
-                            decoration: new BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: new DecorationImage(
-                                fit: BoxFit.fill,
-                                image: NetworkImage(
-                                  snapshot.data['imageUrl'],
-                                ),
+                stream: Firestore.instance
+                    .collection(AppModule.to
+                        .getDependency<Authentification>()
+                        .getUserId())
+                    .document("usuario")
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError)
+                    return new Text('Error: ${snapshot.error}');
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.waiting:
+                      return new Text('Loading...');
+                    default:
+                      return new UserAccountsDrawerHeader(
+                        accountName: new Text(snapshot.data['campus']),
+                        accountEmail: null,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Theme.of(context).accentColor,
+                              blurRadius: 5.0,
+                              spreadRadius: 2.0,
+                            )
+                          ],
+                        ),
+                        currentAccountPicture: new Container(
+                          decoration: new BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: new DecorationImage(
+                              fit: BoxFit.fill,
+                              image: NetworkImage(
+                                User.image,
                               ),
                             ),
                           ),
-                        );
-                    }
-                  }),
+                        ),
+                      );
+                  }
+                },
+              ),
               ListTile(
                 leading: Icon(
                   Icons.home,
@@ -153,7 +146,8 @@ class SideMenu extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                onTap: _openFileExplorer,
+                onTap: () => launch(
+                    'https://drive.google.com/drive/folders/1lRbgNRwxfFmRkeLoG5YIzsaaDHdn5S7S?usp=sharing'),
               ),
               Divider(
                 color: Theme.of(context).accentColor,
@@ -194,8 +188,7 @@ class SideMenu extends StatelessWidget {
                       fontWeight: FontWeight.bold),
                 ),
                 onTap: () {
-                  customLaunch(
-                      'mailto:gabinete@ifma.edu.br');
+                  customLaunch('mailto:gabinete@ifma.edu.br');
                 },
               ),
               Divider(

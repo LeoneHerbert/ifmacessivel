@@ -7,20 +7,21 @@ import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:pdf/widgets.dart';
 
 Future<Uint8List> generateSetor(PdfPageFormat pageFormat) async {
   final lorem = pw.LoremText();
 
-  final setor = Setor(
-    baseColor: PdfColors.blue500,
-    accentColor: PdfColors.blue500,
+  final setor = SetorConfiguracoes(
+    baseColor: PdfColors.green,
+    accentColor: PdfColors.redAccent700,
   );
 
   return await setor.buildPdf(pageFormat);
 }
 
-class Setor {
-  Setor({
+class SetorConfiguracoes {
+  SetorConfiguracoes({
     this.baseColor,
     this.accentColor,
   });
@@ -126,9 +127,13 @@ class Setor {
                       color: accentColor,
                     ),
                     padding: const pw.EdgeInsets.only(
-                        left: 10, top: 10, bottom: 10, right: 10),
+                      left: 10,
+                      top: 10,
+                      bottom: 10,
+                      right: 10,
+                    ),
                     alignment: pw.Alignment.centerLeft,
-                    height: 50,
+                    height: 60,
                     child: pw.DefaultTextStyle(
                       style: pw.TextStyle(
                         color: _accentTextColor,
@@ -137,8 +142,8 @@ class Setor {
                       child: pw.GridView(
                         crossAxisCount: 2,
                         children: [
-                          pw.Text('Campus:'),
-                          pw.Text('Monte Castelo'),
+                          pw.Text('Responsável:'),
+                          pw.Text('Herbert'),
                           pw.Text('Data:'),
                           pw.Text(_formatDate(DateTime.now())),
                         ],
@@ -244,21 +249,17 @@ class Setor {
 
   pw.Widget _contentHeader(pw.Context context) {
     return pw.Row(
-      crossAxisAlignment: pw.CrossAxisAlignment.start,
+      crossAxisAlignment: pw.CrossAxisAlignment.center,
+      mainAxisAlignment: pw.MainAxisAlignment.center,
       children: [
-        pw.Expanded(
-          child: pw.Container(
-            margin: const pw.EdgeInsets.symmetric(horizontal: 100),
-            height: 70,
-            child: pw.FittedBox(
-              child: pw.Text(
-                nome,
-                style: pw.TextStyle(
-                  color: baseColor,
-                  fontWeight: pw.FontWeight.bold,
-                  fontSize: 14,
-                ),
-              ),
+        pw.Container(
+          padding: pw.EdgeInsets.all(20),
+          child: pw.Text(
+            nome,
+            style: pw.TextStyle(
+              color: baseColor,
+              fontWeight: pw.FontWeight.bold,
+              fontSize: 30,
             ),
           ),
         ),
@@ -385,29 +386,36 @@ class Setor {
   }
 
   pw.Widget _imagePdf(pw.Document doc) {
-    final pdfImage = PdfImage.file(
-      doc.document,
-      bytes: File(image.path).readAsBytesSync(),
-    );
-    return pw.Container(
-      child: pw.Column(
-        children: [
-          pw.SizedBox(height: 5),
-          pw.Text(
-            "Foto do Setor",
-            style: pw.TextStyle(
-              color: baseColor,
-              fontWeight: pw.FontWeight.bold,
-              fontSize: 30,
+    if (image != null) {
+      final pdfImage = PdfImage.file(
+        doc.document,
+        bytes: File(image.path).readAsBytesSync(),
+      );
+      return pw.Container(
+        child: pw.Column(
+          children: [
+            pw.SizedBox(height: 5),
+            pw.Text(
+              "Foto do Setor",
+              style: pw.TextStyle(
+                color: baseColor,
+                fontWeight: pw.FontWeight.bold,
+                fontSize: 30,
+              ),
             ),
-          ),
-          pw.SizedBox(height: 50),
-          pw.Center(
-            child: pw.Image(pdfImage),
-          )
-        ],
-      ),
-    );
+            pw.SizedBox(height: 50),
+            pw.Center(
+              child: pw.Container(
+                height: 350,
+                width: 450,
+                child: pw.Image(pdfImage),
+              ),
+            )
+          ],
+        ),
+      );
+    }
+    return pw.Container();
   }
 
   pw.Widget _contentTable(pw.Context context) {

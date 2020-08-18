@@ -62,7 +62,7 @@ class CardItem extends StatelessWidget {
               )
             ],
           ),
-          onPressed: ()=> Navigator.push(
+          onPressed: () => Navigator.push(
             context,
             CupertinoPageRoute(
               builder: (context) => new ChecklistModule(setor),

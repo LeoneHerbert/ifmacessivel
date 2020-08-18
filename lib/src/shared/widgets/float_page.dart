@@ -2,15 +2,27 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ifmaacessivel/src/models/user.dart';
+import 'package:ifmaacessivel/src/pages/profile/profile_bloc.dart';
+import 'package:ifmaacessivel/src/pages/profile/profile_module.dart';
+import 'package:ifmaacessivel/src/shared/widgets/custom_text_field.dart';
 
-// ignore: must_be_immutable
 class FloatPage extends StatelessWidget {
+  final _profileBloc = ProfileModule.to.getBloc<ProfileBloc>();
+
+  FloatPage() {
+    _profileBloc.changeCampus(User.campus);
+    _profileBloc.changeEmail(User.email);
+    _profileBloc.changeEncarregado(User.encarregado);
+    _profileBloc.changeEndereco(User.endereco);
+    _profileBloc.changeTelefone(User.telefone);
+  }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       content: Container(
-        width: MediaQuery.of(context).size.width / 1.5,
-        height: MediaQuery.of(context).size.height / 3,
+        width: MediaQuery.of(context).size.width,
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -25,8 +37,43 @@ class FloatPage extends StatelessWidget {
               SizedBox(
                 height: 25,
               ),
+              CustomTextField(
+                icon: Icons.location_city,
+                hint: 'Campus',
+                stream: _profileBloc.outCampus,
+                onChanged: _profileBloc.changeCampus,
+                obscure: false,
+              ),
+              CustomTextField(
+                icon: Icons.person,
+                hint: 'Encarregado(a)',
+                stream: _profileBloc.outEncarregado,
+                onChanged: _profileBloc.changeEncarregado,
+                obscure: false,
+              ),
+              CustomTextField(
+                icon: Icons.mail,
+                hint: 'E-mail',
+                stream: _profileBloc.outEmail,
+                onChanged: _profileBloc.changeEmail,
+                obscure: false,
+              ),
+              CustomTextField(
+                icon: Icons.phone,
+                hint: 'Telefone',
+                stream: _profileBloc.outTelefone,
+                onChanged: _profileBloc.changeTelefone,
+                obscure: false,
+              ),
+              CustomTextField(
+                icon: Icons.location_on,
+                hint: 'Endereço',
+                stream: _profileBloc.outEndereco,
+                onChanged: _profileBloc.changeEndereco,
+                obscure: false,
+              ),
               SizedBox(
-                height: 30,
+                height: 40,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -60,7 +107,10 @@ class FloatPage extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        _profileBloc.submit();
+                        Navigator.pop(context);
+                      },
                     ),
                   ),
                 ],

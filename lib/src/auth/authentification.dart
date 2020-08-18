@@ -28,7 +28,19 @@ class Authentification {
     }
   }
 
+  void register(Map<String, String> data) async {
+    try {
+      final AuthResult authResult = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+          email: data['email'].toString().trim(),
+          password: data['password'].toString().trim());
+    } catch (error) {
+      throw error;
+    }
+  }
+
   void logout() {
+    FirebaseAuth.instance.signOut();
     _currentUser = null;
   }
 

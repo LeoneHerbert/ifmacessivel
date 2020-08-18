@@ -4,8 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:ifmaacessivel/src/models/questionario.dart';
-import 'package:ifmaacessivel/src/pages/pdf/setor_pdf.dart';
-import 'package:ifmaacessivel/src/pages/pdf/main_pdf.dart';
+import 'package:ifmaacessivel/src/pages/pdf/relatorio_setor/setor_pdf.dart';
+import 'package:ifmaacessivel/src/pages/pdf/relatorio_setor/main_pdf.dart';
 import 'package:ifmaacessivel/src/shared/widgets/checklist_card.dart';
 import 'package:ifmaacessivel/src/shared/widgets/default_button.dart';
 import 'package:ifmaacessivel/src/shared/widgets/float_notification.dart';
@@ -33,7 +33,6 @@ class _ChecklistPageState extends State<ChecklistPage> {
 
   @override
   Widget build(BuildContext context) {
-    print("PATH DA IMAGEM");
     return Scaffold(
       appBar: AppBar(
         title: Text("Questionário"),
@@ -79,23 +78,14 @@ class _ChecklistPageState extends State<ChecklistPage> {
                         ),
                       ),
                       onPressed: () {
-                        if (image == null) {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return FloatNotification();
-                            },
-                          );
-                        } else {
-                          montaQuestionarios();
-                          Setor.questionarios = questionarios;
-                          Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                              builder: (context) => MainPDF(),
-                            ),
-                          );
-                        }
+                        montaQuestionarios();
+                        SetorConfiguracoes.questionarios = questionarios;
+                        Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (context) => MainPDF(),
+                          ),
+                        );
                       },
                     ),
                   )
@@ -115,7 +105,6 @@ class _ChecklistPageState extends State<ChecklistPage> {
             label: "Câmera",
             onTap: () async {
               image = await ImagePicker.pickImage(source: ImageSource.camera);
-              print(image.path);
             },
           ),
           SpeedDialChild(
@@ -125,7 +114,6 @@ class _ChecklistPageState extends State<ChecklistPage> {
             label: "Galeria",
             onTap: () async {
               image = await ImagePicker.pickImage(source: ImageSource.gallery);
-              print(image.path);
             },
           )
         ],

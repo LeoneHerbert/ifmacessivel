@@ -9,17 +9,17 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
-import 'setor_pdf.dart';
+import 'relatorio_setores_pdf.dart';
 
-class MainPDF extends StatefulWidget {
+class RelatorioGeralPDF extends StatefulWidget {
 
   @override
-  MainPDFtate createState() {
-    return MainPDFtate();
+  RelatorioGeralPDFState createState() {
+    return RelatorioGeralPDFState();
   }
 }
 
-class MainPDFtate extends State<MainPDF> with SingleTickerProviderStateMixin {
+class RelatorioGeralPDFState extends State<RelatorioGeralPDF> with SingleTickerProviderStateMixin {
   List<Tab> _myTabs;
   List<LayoutCallback> _tabGen;
   List<String> _tabUrl;
@@ -38,14 +38,14 @@ class MainPDFtate extends State<MainPDF> with SingleTickerProviderStateMixin {
     final PrintingInfo info = await Printing.info();
 
     _myTabs = const <Tab>[
-      Tab(text: 'SETOR'),
+      Tab(text: 'RELATÓRIO GERAL'),
     ];
     _tabGen = const <LayoutCallback>[
-      generateSetor,
+      generateSetores,
     ];
 
     _tabUrl = const <String>[
-      'setor_pdf.dart',
+      'relatorio_setores_pdf.dart',
     ];
 
     _tabController = TabController(

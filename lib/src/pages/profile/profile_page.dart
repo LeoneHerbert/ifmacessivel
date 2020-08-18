@@ -1,9 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:ifmaacessivel/src/app/app_module.dart';
 import 'package:ifmaacessivel/src/auth/authentification.dart';
-import 'package:ifmaacessivel/src/shared/widgets/float_notification.dart';
+import 'package:ifmaacessivel/src/models/user.dart';
 import 'package:ifmaacessivel/src/shared/widgets/float_page.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as Path;
 
 class ProfilePage extends StatefulWidget {
   ProfilePage({Key key, this.title}) : super(key: key);
@@ -15,6 +19,9 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  File image;
+  String _uploadedFileURL;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,21 +54,28 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   child: Column(
                     children: <Widget>[
-                      new Container(
-                        width: MediaQuery.of(context).size.height / 4.5,
-                        height: MediaQuery.of(context).size.height / 4.5,
-                        decoration: new BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: new DecorationImage(
-                            fit: BoxFit.fill,
-                            image: NetworkImage(
-                              snapshot.data['imageUrl'],
-                              scale: 20,
+                      GestureDetector(
+                        child: new Container(
+                          width: MediaQuery.of(context).size.height / 4.5,
+                          height: MediaQuery.of(context).size.height / 4.5,
+                          decoration: new BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: new DecorationImage(
+                              fit: BoxFit.fill,
+                              image: NetworkImage(
+                                User.image,
+                                scale: 20,
+                              ),
                             ),
                           ),
                         ),
+                        onTap: () async {
+                          image = await ImagePicker.pickImage(
+                              source: ImageSource.gallery);
+                          print(image.path);
+                          addImageToFirebase();
+                        },
                       ),
-                      /*
                       Container(
                         margin: EdgeInsets.only(right: 10),
                         child: Row(
@@ -69,10 +83,10 @@ class _ProfilePageState extends State<ProfilePage> {
                           children: <Widget>[
                             GestureDetector(
                               onTap: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) => FloatPage());
-
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => FloatPage(),
+                                );
                               },
                               child: Icon(
                                 Icons.settings,
@@ -82,7 +96,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             )
                           ],
                         ),
-                      ),*/
+                      ),
                     ],
                   ),
                 ),
@@ -92,14 +106,14 @@ class _ProfilePageState extends State<ProfilePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        "Nome",
+                        "Campus",
                         style: Theme.of(context).textTheme.title,
                       ),
                       SizedBox(
                         height: 4,
                       ),
                       Text(
-                        snapshot.data['nome'],
+                        snapshot.data['campus'],
                         style: Theme.of(context).textTheme.headline,
                       ),
                       SizedBox(
@@ -161,20 +175,6 @@ class _ProfilePageState extends State<ProfilePage> {
                       SizedBox(
                         height: 15,
                       ),
-                      Divider(
-                        color: Colors.black,
-                      ),
-                      Text(
-                        "Descrição",
-                        style: Theme.of(context).textTheme.title,
-                      ),
-                      SizedBox(
-                        height: 4,
-                      ),
-                      Text(
-                        snapshot.data['descricao'],
-                        style: Theme.of(context).textTheme.headline,
-                      ),
                     ],
                   ),
                 )
@@ -184,5 +184,37 @@ class _ProfilePageState extends State<ProfilePage> {
         },
       ),
     );
+  }
+
+  Future<void> addImageToFirebase() async {
+    FirebaseStorage _storage = FirebaseStorage.instance;
+    StorageReference ref = _storage.ref();
+    String downloadUrl1;
+    StorageUploadTask storageUploadTask = ref.child("image1.jpg").putFile(image);
+
+    if (storageUploadTask.isSuccessful || storageUploadTask.isComplete) {
+      final String url = await ref.getDownloadURL();
+      print("The download URL is " + url);
+    } else if (storageUploadTask.isInProgress) {
+
+      storageUploadTask.events.listen((event) {
+        double percentage = 100 *(event.snapshot.bytesTransferred.toDouble()
+            / event.snapshot.totalByteCount.toDouble());
+        print("The percentage " + percentage.toString());
+      });
+
+      StorageTaskSnapshot storageTaskSnapshot = await storageUploadTask.onComplete;
+      downloadUrl1 = await storageTaskSnapshot.ref.getDownloadURL();
+      print("Download URL " + downloadUrl1.toString());
+
+    } else{
+    }
+    Firestore.instance
+        .collection(
+        AppModule.to.getDependency<Authentification>().getUserId())
+        .document("image").setData({'url': downloadUrl1.toString()});
+    setState(() {
+      User.image = downloadUrl1;
+    });
   }
 }
