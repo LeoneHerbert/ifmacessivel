@@ -1,6 +1,5 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:ifmaacessivel/src/app/app_module.dart';
 import 'package:ifmaacessivel/src/auth/authentification.dart';
 import 'package:rxdart/rxdart.dart';
@@ -42,9 +41,9 @@ class ProfileBloc extends BlocBase {
     };
 
     Firestore.instance
-        .collection(
-        AppModule.to.getDependency<Authentification>().getUserId())
-        .document("usuario").setData(data);
+        .collection(AppModule.to.getDependency<Authentification>().getUserId())
+        .document("usuario")
+        .setData(data);
   }
 
   @override

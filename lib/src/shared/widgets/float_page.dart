@@ -42,6 +42,7 @@ class FloatPage extends StatelessWidget {
                 hint: 'Campus',
                 stream: _profileBloc.outCampus,
                 onChanged: _profileBloc.changeCampus,
+                valorInicial: User.campus,
                 obscure: false,
               ),
               CustomTextField(
@@ -49,6 +50,7 @@ class FloatPage extends StatelessWidget {
                 hint: 'Encarregado(a)',
                 stream: _profileBloc.outEncarregado,
                 onChanged: _profileBloc.changeEncarregado,
+                valorInicial: User.encarregado,
                 obscure: false,
               ),
               CustomTextField(
@@ -56,6 +58,7 @@ class FloatPage extends StatelessWidget {
                 hint: 'E-mail',
                 stream: _profileBloc.outEmail,
                 onChanged: _profileBloc.changeEmail,
+                valorInicial: User.email,
                 obscure: false,
               ),
               CustomTextField(
@@ -63,6 +66,7 @@ class FloatPage extends StatelessWidget {
                 hint: 'Telefone',
                 stream: _profileBloc.outTelefone,
                 onChanged: _profileBloc.changeTelefone,
+                valorInicial: User.telefone,
                 obscure: false,
               ),
               CustomTextField(
@@ -70,6 +74,7 @@ class FloatPage extends StatelessWidget {
                 hint: 'Endereço',
                 stream: _profileBloc.outEndereco,
                 onChanged: _profileBloc.changeEndereco,
+                valorInicial: User.endereco,
                 obscure: false,
               ),
               SizedBox(

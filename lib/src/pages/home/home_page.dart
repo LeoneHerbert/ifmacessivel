@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ifmaacessivel/src/app/app_module.dart';
 import 'package:ifmaacessivel/src/models/relatorio.dart';
 import 'package:ifmaacessivel/src/models/setor.dart';
 import 'package:ifmaacessivel/src/models/user.dart';
+import 'package:ifmaacessivel/src/pages/estatisticas/estatisticas_module.dart';
 import 'package:ifmaacessivel/src/pages/profile/profile_module.dart';
 import 'package:ifmaacessivel/src/pages/setores/setores_module.dart';
 import 'package:ifmaacessivel/src/shared/widgets/side_menu.dart';
@@ -67,8 +67,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    user = User();
-    relatorio = new Relatorio();
+
+    Relatorio.valorDeAcessibilidade();
+    user = new User();
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -125,8 +126,10 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 Text(
                                   'Setores',
-                                  style: text(
-                                    Theme.of(context).accentColor,
+                                  style: TextStyle(
+                                    color: Theme.of(context).accentColor,
+                                    fontSize: 23,
+                                    fontWeight: FontWeight.bold
                                   ),
                                 ),
                               ],
@@ -150,8 +153,10 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 Text(
                                   'Documentos',
-                                  style: text(
-                                    Theme.of(context).accentColor,
+                                  style: TextStyle(
+                                      color: Theme.of(context).accentColor,
+                                      fontSize: 23,
+                                      fontWeight: FontWeight.bold
                                   ),
                                 ),
                               ],
@@ -188,8 +193,10 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 Text(
                                   'Perfil',
-                                  style: text(
-                                    Theme.of(context).accentColor,
+                                  style: TextStyle(
+                                      color: Theme.of(context).accentColor,
+                                      fontSize: 23,
+                                      fontWeight: FontWeight.bold
                                   ),
                                 ),
                               ],
@@ -198,7 +205,12 @@ class _HomePageState extends State<HomePage> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            customLaunch('mailto:gabinete@ifma.edu.br');
+                            Navigator.push(
+                              context,
+                              CupertinoPageRoute(
+                                builder: (context) => EstatisticasModule(),
+                              ),
+                            );
                           },
                           child: Container(
                             margin: EdgeInsets.all(10),
@@ -209,14 +221,16 @@ class _HomePageState extends State<HomePage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Icon(
-                                  Icons.email,
+                                  Icons.insert_chart,
                                   size: MediaQuery.of(context).size.height / 7,
                                   color: Theme.of(context).accentColor,
                                 ),
                                 Text(
-                                  'E-mail',
-                                  style: text(
-                                    Theme.of(context).accentColor,
+                                  'Estatísticas',
+                                  style: TextStyle(
+                                      color: Theme.of(context).accentColor,
+                                      fontSize: 23,
+                                      fontWeight: FontWeight.bold
                                   ),
                                 ),
                               ],

@@ -8,7 +8,6 @@ import 'package:ifmaacessivel/src/pages/pdf/relatorio_setor/setor_pdf.dart';
 import 'package:ifmaacessivel/src/pages/pdf/relatorio_setor/main_pdf.dart';
 import 'package:ifmaacessivel/src/shared/widgets/checklist_card.dart';
 import 'package:ifmaacessivel/src/shared/widgets/default_button.dart';
-import 'package:ifmaacessivel/src/shared/widgets/float_notification.dart';
 import 'package:image_picker/image_picker.dart';
 
 // ignore: must_be_immutable

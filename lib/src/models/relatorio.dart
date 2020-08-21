@@ -16,6 +16,28 @@ class Relatorio {
   static List<Questionario> mobiliarioList;
   static List<Questionario> restaurantesList;
   static List<Questionario> vestiariosList;
+  static double valorAcessoAEdificacao = 0;
+  static double valorAuditorios = 0;
+  static double valorBanheiros = 0;
+  static double valorBiblioteca = 0;
+  static double valorCalcada = 0;
+  static double valorCirculacaoInterna = 0;
+  static double valorEsquadrias = 0;
+  static double valorEstacionamento = 0;
+  static double valorMobiliario = 0;
+  static double valorRestaurantes = 0;
+  static double valorVestiarios = 0;
+  static double valorTotalAcessoAEdificacao = 0;
+  static double valorTotalAuditorios = 0;
+  static double valorTotalBanheiros = 0;
+  static double valorTotalBiblioteca = 0;
+  static double valorTotalCalcada = 0;
+  static double valorTotalCirculacaoInterna = 0;
+  static double valorTotalEsquadrias = 0;
+  static double valorTotalEstacionamento = 0;
+  static double valorTotalMobiliario = 0;
+  static double valorTotalRestaurantes = 0;
+  static double valorTotalVestiarios = 0;
 
   Relatorio() {
     getCalcadaList();
@@ -29,6 +51,115 @@ class Relatorio {
     getMobiliarioList();
     getRestaurantesList();
     getVestiariosList();
+  }
+
+  static void valorDeAcessibilidade() {
+    valorAcessoAEdificacao = 0;
+    valorAuditorios = 0;
+    valorBanheiros = 0;
+    valorBiblioteca = 0;
+    valorCalcada = 0;
+    valorCirculacaoInterna = 0;
+    valorEsquadrias = 0;
+    valorEstacionamento = 0;
+    valorMobiliario = 0;
+    valorRestaurantes = 0;
+    valorVestiarios = 0;
+    valorTotalAcessoAEdificacao = 0;
+    valorTotalAuditorios = 0;
+    valorTotalBanheiros = 0;
+    valorTotalBiblioteca = 0;
+    valorTotalCalcada = 0;
+    valorTotalCirculacaoInterna = 0;
+    valorTotalEsquadrias = 0;
+    valorTotalEstacionamento = 0;
+    valorTotalMobiliario = 0;
+    valorTotalRestaurantes = 0;
+    valorTotalVestiarios = 0;
+
+    acessoAEdificacaoList.forEach((questionario) {
+      valorTotalAcessoAEdificacao = valorTotalAcessoAEdificacao + questionario.q;
+      if (questionario.situacao == 'Sim' || questionario.situacao == 'N/A') {
+        valorAcessoAEdificacao = valorAcessoAEdificacao + questionario.q;
+      }
+    });
+     auditoriosList.forEach((questionario) {
+       valorTotalAuditorios = valorTotalAuditorios + questionario.q;
+      if (questionario.situacao == 'Sim' || questionario.situacao == 'N/A') {
+        valorAuditorios = valorAuditorios + questionario.q;
+      }
+    });
+     banheirosList.forEach((questionario) {
+       valorTotalBanheiros = valorTotalBanheiros + questionario.q;
+      if (questionario.situacao == 'Sim' || questionario.situacao == 'N/A') {
+        valorBanheiros = valorBanheiros + questionario.q;
+      }
+    });
+
+    bibliotecaList.forEach((questionario) {
+      valorTotalBiblioteca = valorTotalBiblioteca + questionario.q;
+      if (questionario.situacao == 'Sim' || questionario.situacao == 'N/A') {
+        valorBiblioteca = valorBiblioteca + questionario.q;
+      }
+    });
+     calcadaList.forEach((questionario) {
+       valorTotalCalcada = valorTotalCalcada + questionario.q;
+      if (questionario.situacao == 'Sim' || questionario.situacao == 'N/A') {
+        valorCalcada = valorCalcada + questionario.q;
+      }
+    });
+     circulacaoInternaList.forEach((questionario) {
+       valorTotalCirculacaoInterna = valorTotalCirculacaoInterna + questionario.q;
+      if (questionario.situacao == 'Sim' || questionario.situacao == 'N/A') {
+        valorCirculacaoInterna = valorCirculacaoInterna + questionario.q;
+      }
+    });
+     esquadriasList.forEach((questionario) {
+       valorTotalEsquadrias = valorTotalEsquadrias + questionario.q;
+      if (questionario.situacao == 'Sim' || questionario.situacao == 'N/A') {
+        valorEsquadrias = valorEsquadrias + questionario.q;
+      }
+    });
+     estacionamentoList.forEach((questionario) {
+       valorTotalEstacionamento = valorTotalEstacionamento + questionario.q;
+      if (questionario.situacao == 'Sim' || questionario.situacao == 'N/A') {
+        valorEstacionamento = valorEstacionamento + questionario.q;
+      }
+    });
+     mobiliarioList.forEach((questionario) {
+       valorTotalMobiliario = valorTotalMobiliario + questionario.q;
+      if (questionario.situacao == 'Sim' || questionario.situacao == 'N/A') {
+        valorMobiliario = valorMobiliario + questionario.q;
+      }
+    });
+     restaurantesList.forEach((questionario) {
+       valorTotalRestaurantes = valorTotalRestaurantes + questionario.q;
+      if (questionario.situacao == 'Sim' || questionario.situacao == 'N/A') {
+        valorRestaurantes = valorRestaurantes + questionario.q;
+      }
+    });
+     vestiariosList.forEach((questionario) {
+       valorTotalVestiarios = valorTotalVestiarios + questionario.q;
+      if (questionario.situacao == 'Sim' || questionario.situacao == 'N/A') {
+        valorVestiarios = valorVestiarios + questionario.q;
+      }
+    });
+  }
+
+  static double valorTotal(){
+    double valorTotal = 0;
+    valorTotal = valorVestiarios +
+        valorRestaurantes +
+        valorMobiliario +
+        valorEstacionamento +
+        valorEsquadrias +
+        valorCirculacaoInterna +
+        valorCalcada +
+        valorBanheiros +
+        valorAcessoAEdificacao +
+        valorAuditorios +
+        valorBiblioteca;
+    return valorTotal;
   }
 
   void getAcessoAEdificacaoList() {

@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ifmaacessivel/src/models/enums/estado.dart';
+import 'package:ifmaacessivel/src/models/relatorio.dart';
 import 'package:ifmaacessivel/src/pages/home/home_module.dart';
 import 'package:ifmaacessivel/src/pages/login/login_bloc.dart';
 import 'package:ifmaacessivel/src/pages/login/login_module.dart';
+import 'package:ifmaacessivel/src/pages/redefinir_senha/redefinir_senha_module.dart';
 import 'package:ifmaacessivel/src/shared/widgets/custom_text_field.dart';
 import 'package:ifmaacessivel/src/shared/widgets/default_button.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +20,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
+    Relatorio relatorio = new Relatorio();
     _loginBloc.outEstado.listen(
       (estado) {
         switch (estado) {
@@ -79,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
     return Stack(
       children: <Widget>[
         Container(
-          height: MediaQuery.of(context).size.height / 2.3,
+          height: MediaQuery.of(context).size.height/2.15,
           width: MediaQuery.of(context).size.width,
           child: Image.asset(
             "images/background.png",
@@ -87,9 +90,9 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
         Positioned(
-          height: MediaQuery.of(context).size.height / 18,
+          height: MediaQuery.of(context).size.height/18,
           width: 100,
-          top: MediaQuery.of(context).size.height / 2.9,
+          top: MediaQuery.of(context).size.height/2.9,
           left: 20,
           child: Container(
             padding: EdgeInsets.only(top: 5),
@@ -164,7 +167,24 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                     SizedBox(
-                      height: 40,
+                      height: 10,
+                    ),
+                    GestureDetector(
+                      child: Text(
+                        "Esqueceu sua senha? Clique aqui.",
+                        style: TextStyle(color: Colors.blueAccent),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (context) => RedefinirSenhaModule(),
+                          ),
+                        );
+                      },
+                    ),
+                    SizedBox(
+                      height: 30,
                     ),
                     StreamBuilder<bool>(
                       stream: _loginBloc.outSubmitValido,

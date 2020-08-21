@@ -9,6 +9,7 @@ class User {
   static String telefone;
   static String encarregado;
   static String image;
+  static String pathGoogleDrive;
 
   User() {
     Firestore.instance
@@ -29,10 +30,14 @@ class User {
         .document("image")
         .snapshots()
         .listen(
-          (data) {
+      (data) {
         image = data.data['url'];
       },
     );
+    Firestore.instance.collection("drive").document("path").snapshots().listen(
+      (data) {
+        pathGoogleDrive = data.data['url'];
+      },
+    );
   }
-
 }

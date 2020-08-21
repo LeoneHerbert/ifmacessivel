@@ -29,6 +29,7 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return StreamBuilder<String>(
       stream: stream,
       builder: (context, snapshot) {

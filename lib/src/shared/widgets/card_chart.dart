@@ -1,21 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ifmaacessivel/src/pages/checklist/checklist_module.dart';
 
-class CardItem extends StatelessWidget {
+class CardChart extends StatelessWidget {
   final String image;
   final String setor;
-  final String itens;
+  final String legenda;
 
-  const CardItem(
-    this.image,
-    this.setor,
-      this.itens
-  );
+  const CardChart(
+      this.image,
+      this.setor,
+      this.legenda
+      );
 
   @override
   Widget build(BuildContext context) {
-
     return Padding(
       padding: EdgeInsets.all(16),
       child: SingleChildScrollView(
@@ -52,9 +50,10 @@ class CardItem extends StatelessWidget {
                     height: 10,
                   ),
                   Text(
-                    itens,
+                    legenda,
                     style: TextStyle(
                       color: Colors.red,
+                      fontSize: 15,
                       fontWeight: FontWeight.bold,
                     ),
                   )
@@ -62,12 +61,7 @@ class CardItem extends StatelessWidget {
               )
             ],
           ),
-          onPressed: () => Navigator.push(
-            context,
-            CupertinoPageRoute(
-              builder: (context) => new ChecklistModule(setor),
-            ),
-          ),
+          onPressed: null
         ),
       ),
     );
