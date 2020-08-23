@@ -2,17 +2,18 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class ChecklistCard extends StatelessWidget {
+// ignore: must_be_immutable
+class CardChecklist extends StatelessWidget {
   final String idDocument;
   final String id;
-  final String texto;
-  final String situacao;
+  final String text;
+  final String situation;
   final double q;
-  final String setor;
+  final String sector;
 
-  ChecklistCard(
-      this.idDocument, this.id, this.texto, this.situacao, this.q, this.setor) {
-    _selectedRadio = situacao;
+  CardChecklist(
+      this.idDocument, this.id, this.text, this.situation, this.q, this.sector) {
+    _selectedRadio = situation;
     _streamController.sink.add(_selectedRadio);
   }
 
@@ -24,12 +25,12 @@ class ChecklistCard extends StatelessWidget {
     _streamController.sink.add(_selectedRadio);
     Firestore.instance
         .collection("criterios_de_acessibilidade")
-        .document(setor)
+        .document(sector)
         .collection("itens")
         .document(idDocument)
         .setData(<String, dynamic>{
       "id": id,
-      "texto": texto,
+      "texto": text,
       "situacao": _selectedRadio,
       "q": q
     });
@@ -41,7 +42,7 @@ class ChecklistCard extends StatelessWidget {
     return StreamBuilder<String>(
         stream: _streamController.stream,
         builder: (context, snapshot) {
-          if (texto == null) ;
+          if (text == null) Text('Loading...');
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
             default:
@@ -63,7 +64,7 @@ class ChecklistCard extends StatelessWidget {
                       children: <Widget>[
                         Expanded(
                           child: Text(
-                            id + ' - ' + texto,
+                            id + ' - ' + text,
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 22,
@@ -130,5 +131,8 @@ class ChecklistCard extends StatelessWidget {
               );
           }
         });
+  }
+  void dispose(){
+    _streamController.close();
   }
 }

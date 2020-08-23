@@ -1,10 +1,10 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:ifmaacessivel/src/app/app_module.dart';
-import 'package:ifmaacessivel/src/auth/authentification.dart';
+import 'package:ifmaacessivel/src/auth/auth.dart';
 import 'package:ifmaacessivel/src/shared/validators/login_validator.dart';
 import 'package:rxdart/rxdart.dart';
 
-class RedefinirSenhaBloc extends BlocBase with LoginValidator {
+class ResetPasswordBloc extends BlocBase with LoginValidator {
   final _emailController = BehaviorSubject<String>();
 
   Stream<String> get outEmail =>
@@ -12,13 +12,13 @@ class RedefinirSenhaBloc extends BlocBase with LoginValidator {
 
   Function(String) get changeEmail => _emailController.sink.add;
 
-  Stream<bool> get outSubmitValido =>
+  Stream<bool> get outSubmitValid =>
       Observable.combineLatest2(outEmail, outEmail, (a, b) => true);
 
   Future<bool> submit() async {
     try {
-      Authentification auth = AppModule.to.getDependency<Authentification>();
-      auth.passwordRedefinitionViaEmail(_emailController.value);
+      Auth auth = AppModule.to.getDependency<Auth>();
+      auth.resetPasswordViaEmail(_emailController.value);
       return true;
     } catch (e) {
       print('E-mail utilizado');
@@ -28,6 +28,7 @@ class RedefinirSenhaBloc extends BlocBase with LoginValidator {
 
   @override
   void dispose() {
+    super.dispose();
     _emailController.close();
   }
 }

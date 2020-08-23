@@ -1,23 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ifmaacessivel/src/pages/home/home_module.dart';
-import 'package:ifmaacessivel/src/pages/redefinir_senha/redefinir_senha_bloc.dart';
-import 'package:ifmaacessivel/src/pages/redefinir_senha/redefinir_senha_module.dart';
+import 'package:ifmaacessivel/src/pages/reset_password/reset_password_bloc.dart';
+import 'package:ifmaacessivel/src/pages/reset_password/reset_password_module.dart';
 import 'package:ifmaacessivel/src/shared/widgets/custom_text_field.dart';
 import 'package:ifmaacessivel/src/shared/widgets/default_button.dart';
 import 'package:ifmaacessivel/src/shared/widgets/float_notification.dart';
 
 
 // ignore: must_be_immutable
-class RedefinirSenhaPage extends StatefulWidget {
-
-
+class ResetPasswordPage extends StatefulWidget {
   @override
-  _RedefinirSenhaPageState createState() => _RedefinirSenhaPageState();
+  _ResetPasswordPageState createState() => _ResetPasswordPageState();
 }
 
-class _RedefinirSenhaPageState extends State<RedefinirSenhaPage> {
-  final _cadastrarUsuarioBloc = RedefinirSenhaModule.to.getBloc<RedefinirSenhaBloc>();
+class _ResetPasswordPageState extends State<ResetPasswordPage> {
+  final _resetPasswordBloc = ResetPasswordModule.to.getBloc<ResetPasswordBloc>();
 
   @override
   Widget build(BuildContext context) {
@@ -48,8 +45,8 @@ class _RedefinirSenhaPageState extends State<RedefinirSenhaPage> {
                     child: CustomTextField(
                       icon: Icons.mail,
                       hint: 'E-mail',
-                      stream: _cadastrarUsuarioBloc.outEmail,
-                      onChanged: _cadastrarUsuarioBloc.changeEmail,
+                      stream: _resetPasswordBloc.outEmail,
+                      onChanged: _resetPasswordBloc.changeEmail,
                       obscure: false,
                     ),
                   )
@@ -59,7 +56,7 @@ class _RedefinirSenhaPageState extends State<RedefinirSenhaPage> {
                 height: 40,
               ),
               StreamBuilder<bool>(
-                stream: _cadastrarUsuarioBloc.outSubmitValido,
+                stream: _resetPasswordBloc.outSubmitValid,
                 builder: (context, snapshot) {
                   return DefaultButton(
                     child: Text(
@@ -72,7 +69,7 @@ class _RedefinirSenhaPageState extends State<RedefinirSenhaPage> {
                     onPressed: snapshot.hasData
                         ? () async {
                       bool state;
-                      state = await _cadastrarUsuarioBloc.submit();
+                      state = await _resetPasswordBloc.submit();
                       if(state){
                         Navigator.pop(context);
                         showDialog(

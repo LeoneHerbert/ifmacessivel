@@ -2,51 +2,51 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:ifmaacessivel/src/models/chart.dart';
-import 'package:ifmaacessivel/src/models/relatorio.dart';
+import 'package:ifmaacessivel/src/models/report.dart';
 
 // ignore: must_be_immutable
 class FloatChart extends StatelessWidget {
-  final String nome;
+  final String name;
   final int index;
-  List<charts.Series<Chart, String>> _listGeral;
-  String acessibilidade;
-  Map<String, double> valorSetores = Map();
-  Map<String, double> valorTotalSetores = Map();
+  List<charts.Series<Chart, String>> _generalList;
+  String acessibility;
+  Map<String, double> sectorValues = Map();
+  Map<String, double> sectorTotalValues = Map();
 
-  FloatChart(this.nome, this.index) {
-    valorSetores = {
-      'Acesso à Edificação': Relatorio.valorAcessoAEdificacao,
-      'Auditórios e Similares': Relatorio.valorAuditorios,
-      'Banheiros': Relatorio.valorBanheiros,
-      'Biblioteca': Relatorio.valorBiblioteca,
-      'Calçada': Relatorio.valorCalcada,
-      'Circulação Interna': Relatorio.valorCirculacaoInterna,
-      'Esquadrias': Relatorio.valorEsquadrias,
-      'Estacionamento': Relatorio.valorEstacionamento,
-      'Mobiliário': Relatorio.valorMobiliario,
-      'Restaurantes e Similares': Relatorio.valorRestaurantes,
-      'Vestiários': Relatorio.valorVestiarios,
+  FloatChart(this.name, this.index) {
+    sectorValues = {
+      'Acesso à Edificação': Report.valueAcessoAEdificacao,
+      'Auditórios e Similares': Report.valueAuditorios,
+      'Banheiros': Report.valueBanheiros,
+      'Biblioteca': Report.valueBiblioteca,
+      'Calçada': Report.valueCalcada,
+      'Circulação Interna': Report.valueCirculacaoInterna,
+      'Esquadrias': Report.valueEsquadrias,
+      'Estacionamento': Report.valueEstacionamento,
+      'Mobiliário': Report.valueMobiliario,
+      'Restaurantes e Similares': Report.valueRestaurantes,
+      'Vestiários': Report.valueVestiarios,
     };
 
-    valorTotalSetores = {
-      'Acesso à Edificação': Relatorio.valorTotalAcessoAEdificacao,
-      'Auditórios e Similares': Relatorio.valorTotalAuditorios,
-      'Banheiros': Relatorio.valorTotalBanheiros,
-      'Biblioteca': Relatorio.valorTotalBiblioteca,
-      'Calçada': Relatorio.valorTotalCalcada,
-      'Circulação Interna': Relatorio.valorTotalCirculacaoInterna,
-      'Esquadrias': Relatorio.valorTotalEsquadrias,
-      'Estacionamento': Relatorio.valorTotalEstacionamento,
-      'Mobiliário': Relatorio.valorTotalMobiliario,
-      'Restaurantes e Similares': Relatorio.valorTotalRestaurantes,
-      'Vestiários': Relatorio.valorTotalVestiarios,
+    sectorTotalValues = {
+      'Acesso à Edificação': Report.totalValueAcessoAEdificacao,
+      'Auditórios e Similares': Report.totalValueAuditorios,
+      'Banheiros': Report.totalValueBanheiros,
+      'Biblioteca': Report.totalValueBiblioteca,
+      'Calçada': Report.totalValueCalcada,
+      'Circulação Interna': Report.totalValueCirculacaoInterna,
+      'Esquadrias': Report.totalValueEsquadrias,
+      'Estacionamento': Report.totalValueEstacionamento,
+      'Mobiliário': Report.totalValueMobiliario,
+      'Restaurantes e Similares': Report.totalValueRestaurantes,
+      'Vestiários': Report.totalValueVestiarios,
     };
-    _listGeral = List<charts.Series<Chart, String>>();
+    _generalList = List<charts.Series<Chart, String>>();
     _generateData();
   }
 
-  double calculoPorcentagem(double valorTotal, double valor) {
-    return (valor / valorTotal) * 100;
+  double calculoPorcentagem(double totalValue, double value) {
+    return (value / totalValue) * 100;
   }
 
   double format(double number) {
@@ -55,78 +55,92 @@ class FloatChart extends StatelessWidget {
   }
 
   _generateData() {
-    var geral = [
+    List<Chart> chart = [
       new Chart(
           'Acessibilidade',
           format(
-              calculoPorcentagem(valorTotalSetores[nome], valorSetores[nome])),
-          cor(calculoPorcentagem(valorTotalSetores[nome], valorSetores[nome]))),
+              calculoPorcentagem(sectorTotalValues[name], sectorValues[name])),
+          cor(calculoPorcentagem(sectorTotalValues[name], sectorValues[name]))),
       new Chart(
           'Inacessibilidade',
-          format((valorTotalSetores[nome] - valorSetores[nome]) * 10),
+          format((sectorTotalValues[name] - sectorValues[name]) * 10),
           Colors.amberAccent),
     ];
-    _listGeral.add(
+    _generalList.add(
       charts.Series(
-        id: 'geral',
+        id: 'chart',
         // ignore: missing_return
-        insideLabelStyleAccessorFn: (Chart geral, _) {
-          charts.MaterialPalette.black;
+        insideLabelStyleAccessorFn: (Chart chart, _) {
         },
-        measureFn: (Chart geral, _) => geral.valor,
-        colorFn: (Chart geral, _) =>
-            charts.ColorUtil.fromDartColor(geral.color),
-        data: geral,
-        labelAccessorFn: (Chart row, _) => '${row.valor}%',
-        domainFn: (Chart geral, _) => geral.nome,
+        measureFn: (Chart chart, _) => chart.value,
+        colorFn: (Chart chart, _) =>
+            charts.ColorUtil.fromDartColor(chart.color),
+        data: chart,
+        labelAccessorFn: (Chart row, _) => '${row.value}%',
+        domainFn: (Chart chart, _) => chart.name,
       ),
     );
   }
 
-  Color cor(double valor) {
-    if (valor < 70) {
-      acessibilidade = "Irregular";
+  Color cor(double value) {
+    if (value < 70) {
+      acessibility = "Irregular";
       return Colors.red;
-    } else if (valor >= 70 && valor <= 85) {
-      acessibilidade = "Regular";
+    } else if (value >= 70 && value <= 85) {
+      acessibility = "Regular";
       return Colors.green;
     }
-    acessibilidade = "Ótimo";
+    acessibility = "Ótimo";
     return Colors.blue;
   }
 
   @override
   Widget build(BuildContext context) {
-
     return AlertDialog(
       content: Container(
-        height: MediaQuery.of(context).size.height/2,
+        height: MediaQuery.of(context).size.height / 2.8,
         width: double.maxFinite,
         child: Center(
           child: Column(
             children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              Stack(
                 children: <Widget>[
-                  Text(
-                    nome,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20 ,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        name,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ],
                   ),
-                  GestureDetector(
-                    child: Icon(Icons.close),
-                    onTap: () => Navigator.pop(context),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      GestureDetector(
+                        child: Icon(Icons.close),
+                        onTap: () => Navigator.pop(context),
+                      ),
+                    ],
                   ),
                 ],
               ),
-              SizedBox(
-                height: 10.0 ,
+              Divider(
+                color: Theme.of(context).accentColor,
+              ),
+              Text(
+                acessibility,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               Expanded(
                 child: charts.PieChart(
-                  _listGeral,
+                  _generalList,
                   animate: true,
                   animationDuration: Duration(seconds: 2),
                   defaultRenderer: new charts.ArcRendererConfig(
@@ -147,6 +161,7 @@ class FloatChart extends StatelessWidget {
                           charts.OutsideJustification.endDrawArea,
                       horizontalFirst: false,
                       desiredMaxRows: 1,
+                      position: charts.BehaviorPosition.bottom,
                       entryTextStyle: charts.TextStyleSpec(
                         color: charts.MaterialPalette.purple.shadeDefault,
                         fontFamily: 'Arial',
@@ -156,13 +171,7 @@ class FloatChart extends StatelessWidget {
                   ],
                 ),
               ),
-              Text(
-                acessibilidade,
-                style: TextStyle(
-                  fontSize: 20 ,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+
             ],
           ),
         ),

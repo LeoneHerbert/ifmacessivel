@@ -1,26 +1,23 @@
-import 'dart:ffi';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ifmaacessivel/src/models/questionario.dart';
-import 'package:ifmaacessivel/src/pages/cadastrar_usuario/cadastrar_usuario_bloc.dart';
-import 'package:ifmaacessivel/src/pages/cadastrar_usuario/cadastrar_usuario_module.dart';
 import 'package:ifmaacessivel/src/pages/home/home_module.dart';
+import 'package:ifmaacessivel/src/pages/register_user/register_user_bloc.dart';
+import 'package:ifmaacessivel/src/pages/register_user/register_user_module.dart';
 import 'package:ifmaacessivel/src/shared/widgets/custom_text_field.dart';
 import 'package:ifmaacessivel/src/shared/widgets/default_button.dart';
 import 'package:ifmaacessivel/src/shared/widgets/float_notification.dart';
 
 
 // ignore: must_be_immutable
-class CadastrarUsuarioPage extends StatefulWidget {
+class RegisterUserPage extends StatefulWidget {
 
 
   @override
-  _CadastrarUsuarioPageState createState() => _CadastrarUsuarioPageState();
+  _RegisterUserPageState createState() => _RegisterUserPageState();
 }
 
-class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
-  final _cadastrarUsuarioBloc = CadastrarUsuarioModule.to.getBloc<CadastrarUsuarioBloc>();
+class _RegisterUserPageState extends State<RegisterUserPage> {
+  final _registerUserBloc = RegisterUserModule.to.getBloc<RegisterUserBloc>();
 
   @override
   Widget build(BuildContext context) {
@@ -51,8 +48,8 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
                     child: CustomTextField(
                       icon: Icons.mail,
                       hint: 'E-mail',
-                      stream: _cadastrarUsuarioBloc.outEmail,
-                      onChanged: _cadastrarUsuarioBloc.changeEmail,
+                      stream: _registerUserBloc.outEmail,
+                      onChanged: _registerUserBloc.changeEmail,
                       obscure: false,
                     ),
                   )
@@ -67,8 +64,8 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
                     child: CustomTextField(
                       icon: Icons.lock,
                       hint: 'Senha',
-                      stream: _cadastrarUsuarioBloc.outPassword,
-                      onChanged: _cadastrarUsuarioBloc.changePassword,
+                      stream: _registerUserBloc.outPassword,
+                      onChanged: _registerUserBloc.changePassword,
                       obscure: true,
                     ),
                   )
@@ -78,7 +75,7 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
                 height: 40,
               ),
               StreamBuilder<bool>(
-                stream: _cadastrarUsuarioBloc.outSubmitValido,
+                stream: _registerUserBloc.outSubmitValid,
                 builder: (context, snapshot) {
                   return DefaultButton(
                     child: Text(
@@ -91,7 +88,7 @@ class _CadastrarUsuarioPageState extends State<CadastrarUsuarioPage> {
                     onPressed: snapshot.hasData
                         ? () async {
                       bool state;
-                      state = await _cadastrarUsuarioBloc.submit();
+                      state = await _registerUserBloc.submit();
                       if(state){
                         Navigator.push(
                           context,

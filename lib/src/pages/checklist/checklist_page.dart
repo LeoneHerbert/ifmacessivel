@@ -3,32 +3,33 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:ifmaacessivel/src/models/questionario.dart';
-import 'package:ifmaacessivel/src/pages/pdf/relatorio_setor/setor_pdf.dart';
-import 'package:ifmaacessivel/src/pages/pdf/relatorio_setor/main_pdf.dart';
-import 'package:ifmaacessivel/src/shared/widgets/checklist_card.dart';
+import 'package:ifmaacessivel/src/models/questionnaire.dart';
+import 'package:ifmaacessivel/src/pages/pdf/sector_report/sector_report_page.dart';
+import 'package:ifmaacessivel/src/pages/pdf/sector_report/sector_report_pdf.dart';
+
+import 'package:ifmaacessivel/src/shared/widgets/card_checklist.dart';
 import 'package:ifmaacessivel/src/shared/widgets/default_button.dart';
 import 'package:image_picker/image_picker.dart';
 
 // ignore: must_be_immutable
 class ChecklistPage extends StatefulWidget {
-  String setor;
+  String sector;
 
-  ChecklistPage(String setor) {
-    this.setor = setor;
+  ChecklistPage(String sector) {
+    this.sector = sector;
   }
 
   @override
-  _ChecklistPageState createState() => _ChecklistPageState(setor);
+  _ChecklistPageState createState() => _ChecklistPageState(sector);
 }
 
 class _ChecklistPageState extends State<ChecklistPage> {
-  final String setor;
+  final String sector;
   File image;
-  List<Questionario> questionarios = [];
+  List<Questionnaire> questionnaires = [];
   List<DocumentSnapshot> documents;
 
-  _ChecklistPageState(this.setor);
+  _ChecklistPageState(this.sector);
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +40,7 @@ class _ChecklistPageState extends State<ChecklistPage> {
       body: StreamBuilder<QuerySnapshot>(
         stream: Firestore.instance
             .collection("criterios_de_acessibilidade")
-            .document(setor)
+            .document(sector)
             .collection("itens")
             .snapshots(),
         builder: (context, snapshot) {
@@ -55,13 +56,13 @@ class _ChecklistPageState extends State<ChecklistPage> {
                     child: Column(
                       children: snapshot.data.documents
                           .map(
-                            (document) => ChecklistCard(
+                            (document) => CardChecklist(
                                 document.documentID,
                                 document.data['id'],
                                 document.data['texto'],
                                 document.data['situacao'],
                                 document.data['q'],
-                                setor),
+                                sector),
                           )
                           .toList(),
                     ),
@@ -77,12 +78,12 @@ class _ChecklistPageState extends State<ChecklistPage> {
                         ),
                       ),
                       onPressed: () {
-                        montaQuestionarios();
-                        SetorConfiguracoes.questionarios = questionarios;
+                        montaQuestionnaires();
+                        SectorConfigurations.questionnaires = questionnaires;
                         Navigator.push(
                           context,
                           CupertinoPageRoute(
-                            builder: (context) => MainPDF(),
+                            builder: (context) => SectorReportPage(),
                           ),
                         );
                       },
@@ -120,15 +121,15 @@ class _ChecklistPageState extends State<ChecklistPage> {
     );
   }
 
-  void montaQuestionarios() {
-    questionarios = documents
+  void montaQuestionnaires() {
+    questionnaires = documents
         .map(
-          (document) => Questionario(
+          (document) => Questionnaire(
             document.data['id'],
             document.data['texto'],
             document.data['q'],
             document.data['situacao'],
-            setor,
+            sector,
             image,
           ),
         )

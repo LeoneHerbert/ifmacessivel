@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 
 class CardChart extends StatelessWidget {
   final String image;
-  final String setor;
-  final String legenda;
+  final String sector;
+  final String subtitle;
 
   const CardChart(
       this.image,
-      this.setor,
-      this.legenda
+      this.sector,
+      this.subtitle
       );
 
   @override
@@ -40,7 +40,7 @@ class CardChart extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    setor,
+                    sector,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
@@ -50,7 +50,7 @@ class CardChart extends StatelessWidget {
                     height: 10,
                   ),
                   Text(
-                    legenda,
+                    subtitle,
                     style: TextStyle(
                       color: Colors.red,
                       fontSize: 15,

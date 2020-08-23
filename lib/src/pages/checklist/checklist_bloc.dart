@@ -9,6 +9,7 @@ class ChecklistBloc extends BlocBase {
   @override
   void dispose() {
     super.dispose();
+    _cardController.close();
   }
   
 }

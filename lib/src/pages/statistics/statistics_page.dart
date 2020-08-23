@@ -3,34 +3,32 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ifmaacessivel/src/app/app_module.dart';
 import 'package:ifmaacessivel/src/models/chart.dart';
-import 'package:ifmaacessivel/src/models/debouncer.dart';
-import 'package:ifmaacessivel/src/models/relatorio.dart';
-import 'package:ifmaacessivel/src/models/setor.dart';
+import 'package:ifmaacessivel/src/models/debounce.dart';
+import 'package:ifmaacessivel/src/models/report.dart';
+import 'package:ifmaacessivel/src/models/sector.dart';
 import 'package:ifmaacessivel/src/shared/widgets/card_chart.dart';
 import 'package:ifmaacessivel/src/shared/widgets/float_chart.dart';
 
-class EstatisticasPage extends StatefulWidget {
+class StatisticsPage extends StatefulWidget {
   @override
-  _EstatisticasPageState createState() => _EstatisticasPageState();
+  _StatisticsPageState createState() => _StatisticsPageState();
 }
 
-class _EstatisticasPageState extends State<EstatisticasPage> {
-  List<charts.Series<Chart, String>> _listGeral;
-  var setoresChart;
-  String acessibilidade;
-  bool loading;
-  final _debouncer = Debouncer(milliseconds: 100);
+class _StatisticsPageState extends State<StatisticsPage> {
+  List<charts.Series<Chart, String>> _generalList;
+  String accessibility;
+  bool _isEmpty = false;
+  final _debounce = Debounce(milliseconds: 100);
 
-  List<Setor> setores = List();
-  List<Setor> filteredSetores = List();
+  List<Sector> sectors = List();
+  List<Sector> filteredSectors = List();
 
   @override
   void initState() {
     super.initState();
-    setores = AppModule.setores;
-    filteredSetores = setores;
-    loading = true;
-    _listGeral = List<charts.Series<Chart, String>>();
+    sectors = AppModule.sectors;
+    filteredSectors = sectors;
+    _generalList = List<charts.Series<Chart, String>>();
     _generateData();
   }
 
@@ -40,39 +38,38 @@ class _EstatisticasPageState extends State<EstatisticasPage> {
 
   _generateData() {
 
-    var geral = [
-      new Chart('Acessibilidade', format(Relatorio.valorTotal()),
-          cor(Relatorio.valorTotal())),
+    List<Chart> chart = [
+      new Chart('Acessibilidade', format(Report.totalValue()),
+          cor(Report.totalValue())),
       new Chart(
-          'Inacessibilidade', format(100 - Relatorio.valorTotal()), Colors.amberAccent),
+          'Inacessibilidade', format(100 - Report.totalValue()), Colors.amberAccent),
     ];
 
-    _listGeral.add(
+    _generalList.add(
       charts.Series(
-        id: 'geral',
+        id: 'chart',
         // ignore: missing_return
-        insideLabelStyleAccessorFn: (Chart geral, _) {
-          charts.MaterialPalette.black;
+        insideLabelStyleAccessorFn: (Chart chart, _) {
         },
-        measureFn: (Chart geral, _) => geral.valor,
-        colorFn: (Chart geral, _) =>
-            charts.ColorUtil.fromDartColor(geral.color),
-        data: geral,
-        labelAccessorFn: (Chart row, _) => '${row.valor}%',
-        domainFn: (Chart geral, _) => geral.nome,
+        measureFn: (Chart chart, _) => chart.value,
+        colorFn: (Chart chart, _) =>
+            charts.ColorUtil.fromDartColor(chart.color),
+        data: chart,
+        labelAccessorFn: (Chart row, _) => '${row.value}%',
+        domainFn: (Chart chart, _) => chart.name,
       ),
     );
   }
 
-  Color cor(double valor) {
-    if (valor < 70) {
-      acessibilidade = "Irregular";
+  Color cor(double value) {
+    if (value < 70) {
+      accessibility = "Irregular";
       return Colors.red;
-    } else if (valor >= 70 && valor <= 85) {
-      acessibilidade = "Regular";
+    } else if (value >= 70 && value <= 85) {
+      accessibility = "Regular";
       return Colors.green;
     }
-    acessibilidade = "Ótimo";
+    accessibility = "Ótimo";
     return Colors.blue;
   }
 
@@ -146,7 +143,7 @@ class _EstatisticasPageState extends State<EstatisticasPage> {
                         ),
                         Expanded(
                           child: charts.PieChart(
-                            _listGeral,
+                            _generalList,
                             animate: true,
                             animationDuration: Duration(seconds: 2),
                             defaultRenderer: new charts.ArcRendererConfig(
@@ -176,7 +173,7 @@ class _EstatisticasPageState extends State<EstatisticasPage> {
                           ),
                         ),
                         Text(
-                          acessibilidade,
+                          accessibility,
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -205,16 +202,20 @@ class _EstatisticasPageState extends State<EstatisticasPage> {
                           hintText: 'Buscar setor',
                         ),
                         onChanged: (string) {
-                          _debouncer.run(
+                          _debounce.run(
                             () {
                               setState(
                                 () {
-                                  loading = false;
-                                  filteredSetores = setores
-                                      .where((setor) => (setor.nome
+                                  filteredSectors = sectors
+                                      .where((sector) => (sector.name
                                           .toLowerCase()
                                           .contains(string.toLowerCase())))
                                       .toList();
+                                  if (filteredSectors.isEmpty) {
+                                    _isEmpty = true;
+                                  } else {
+                                    _isEmpty = false;
+                                  }
                                 },
                               );
                             },
@@ -222,25 +223,40 @@ class _EstatisticasPageState extends State<EstatisticasPage> {
                         },
                       ),
                     ),
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: filteredSetores.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return GestureDetector(
-                            child: CardChart(
-                              filteredSetores[index].imageUrl,
-                              filteredSetores[index].nome,
-                              'Gráfico',
+                    StreamBuilder<Object>(
+                      stream: null,
+                      builder: (context, snapshot) {
+                        if (_isEmpty) {
+                          return Container(
+                            padding: EdgeInsets.all(20),
+                            child: Text(
+                              'Setor não encontrado',
+                              style:
+                              TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                             ),
-                            onTap: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) => FloatChart(filteredSetores[index].nome, index),
+                          );
+                        }
+                        return Expanded(
+                          child: ListView.builder(
+                            itemCount: filteredSectors.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return GestureDetector(
+                                child: CardChart(
+                                  filteredSectors[index].imageUrl,
+                                  filteredSectors[index].name,
+                                  'Gráfico',
+                                ),
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => FloatChart(filteredSectors[index].name, index),
+                                  );
+                                },
                               );
                             },
-                          );
-                        },
-                      ),
+                          ),
+                        );
+                      }
                     ),
                   ],
                 ),

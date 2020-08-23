@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ifmaacessivel/src/models/enums/estado.dart';
-import 'package:ifmaacessivel/src/models/relatorio.dart';
+import 'package:ifmaacessivel/src/models/enums/login_state.dart';
+import 'package:ifmaacessivel/src/models/report.dart';
 import 'package:ifmaacessivel/src/pages/home/home_module.dart';
 import 'package:ifmaacessivel/src/pages/login/login_bloc.dart';
 import 'package:ifmaacessivel/src/pages/login/login_module.dart';
-import 'package:ifmaacessivel/src/pages/redefinir_senha/redefinir_senha_module.dart';
+import 'package:ifmaacessivel/src/pages/reset_password/reset_password_module.dart';
 import 'package:ifmaacessivel/src/shared/widgets/custom_text_field.dart';
 import 'package:ifmaacessivel/src/shared/widgets/default_button.dart';
 import 'package:provider/provider.dart';
@@ -20,24 +20,25 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    Relatorio relatorio = new Relatorio();
-    _loginBloc.outEstado.listen(
+    super.initState();
+    new Report();
+    _loginBloc.outLoginState.listen(
       (estado) {
         switch (estado) {
-          case Estado.SUCESSO:
+          case LoginState.SUCESSO:
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                 builder: (context) => Provider<Map>.value(
-                  value: _loginBloc.dadosLogin,
+                  value: _loginBloc.loginData,
                   child: HomeModule(),
                 ),
               ),
             );
             break;
-          case Estado.NAUTORIZADO:
-          case Estado.FALHA:
-          case Estado.CARREGANDO:
-          case Estado.OCIOSO:
+          case LoginState.NAUTORIZADO:
+          case LoginState.FALHA:
+          case LoginState.CARREGANDO:
+          case LoginState.OCIOSO:
         }
       },
     );
@@ -51,26 +52,26 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _loginShape() {
-    return StreamBuilder<Estado>(
-      stream: _loginBloc.outEstado,
-      initialData: Estado.OCIOSO,
+    return StreamBuilder<LoginState>(
+      stream: _loginBloc.outLoginState,
+      initialData: LoginState.OCIOSO,
       builder: (context, snapshot) {
         switch (snapshot.data) {
-          case Estado.CARREGANDO:
+          case LoginState.CARREGANDO:
             return Center(
               child: CircularProgressIndicator(
                 valueColor:
                     AlwaysStoppedAnimation(Theme.of(context).primaryColor),
               ),
             );
-          case Estado.FALHA:
-          case Estado.NAUTORIZADO:
+          case LoginState.FALHA:
+          case LoginState.NAUTORIZADO:
             return _loginError();
             break;
-          case Estado.OCIOSO:
+          case LoginState.OCIOSO:
             return _loginBuilder();
             break;
-          case Estado.SUCESSO:
+          case LoginState.SUCESSO:
             Container();
         }
         return Container();
@@ -178,7 +179,7 @@ class _LoginPageState extends State<LoginPage> {
                         Navigator.push(
                           context,
                           CupertinoPageRoute(
-                            builder: (context) => RedefinirSenhaModule(),
+                            builder: (context) => ResetPasswordModule(),
                           ),
                         );
                       },
@@ -187,7 +188,7 @@ class _LoginPageState extends State<LoginPage> {
                       height: 30,
                     ),
                     StreamBuilder<bool>(
-                      stream: _loginBloc.outSubmitValido,
+                      stream: _loginBloc.outSubmitValid,
                       builder: (context, snapshot) {
                         return DefaultButton(
                           child: Text(

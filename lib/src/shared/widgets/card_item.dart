@@ -4,13 +4,13 @@ import 'package:ifmaacessivel/src/pages/checklist/checklist_module.dart';
 
 class CardItem extends StatelessWidget {
   final String image;
-  final String setor;
-  final String itens;
+  final String sector;
+  final String items;
 
   const CardItem(
     this.image,
-    this.setor,
-      this.itens
+    this.sector,
+      this.items
   );
 
   @override
@@ -42,7 +42,7 @@ class CardItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    setor,
+                    sector,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
@@ -52,7 +52,7 @@ class CardItem extends StatelessWidget {
                     height: 10,
                   ),
                   Text(
-                    itens,
+                    items,
                     style: TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.bold,
@@ -65,7 +65,7 @@ class CardItem extends StatelessWidget {
           onPressed: () => Navigator.push(
             context,
             CupertinoPageRoute(
-              builder: (context) => new ChecklistModule(setor),
+              builder: (context) => new ChecklistModule(sector),
             ),
           ),
         ),

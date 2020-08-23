@@ -1,27 +1,27 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ifmaacessivel/src/app/app_module.dart';
-import 'package:ifmaacessivel/src/auth/authentification.dart';
-import 'package:ifmaacessivel/src/models/enums/estado.dart';
+import 'package:ifmaacessivel/src/auth/auth.dart';
+import 'package:ifmaacessivel/src/models/enums/login_state.dart';
 import 'package:ifmaacessivel/src/shared/validators/login_validator.dart';
 import 'package:rxdart/rxdart.dart';
 
 class LoginBloc extends BlocBase with LoginValidator {
-  Map<String, String> _dadosLogin;
+  Map<String, String> _loginData;
   final _emailController = BehaviorSubject<String>();
   final _passwordController = BehaviorSubject<String>();
-  final _estadoController = BehaviorSubject<Estado>();
+  final _stateController = BehaviorSubject<LoginState>();
 
   Stream<String> get outEmail => _emailController.stream.transform(emailValidation);
   Stream<String> get outPassword => _passwordController.stream.transform(passwordValidation);
-  Stream<Estado> get outEstado => _estadoController.stream;
+  Stream<LoginState> get outLoginState => _stateController.stream;
 
   Function(String) get changeEmail => _emailController.sink.add;
   Function(String) get changePassword => _passwordController.sink.add;
 
-  Map<String, dynamic> get dadosLogin => _dadosLogin;
+  Map<String, dynamic> get loginData => _loginData;
 
-  Stream<bool> get outSubmitValido => Observable.combineLatest2(
+  Stream<bool> get outSubmitValid => Observable.combineLatest2(
       outEmail,
       outPassword,
       (a, b) => true
@@ -30,41 +30,42 @@ class LoginBloc extends BlocBase with LoginValidator {
 
   void submit() async {
     try {
-      Authentification auth = AppModule.to.getDependency<Authentification>();
+      Auth auth = AppModule.to.getDependency<Auth>();
 
       Map<String, String> data = {
         'email': _emailController.value,
         'password': _passwordController.value,
       };
 
-      _estadoController.add(Estado.CARREGANDO);
+      _stateController.add(LoginState.CARREGANDO);
 
       FirebaseUser user = await auth.signIn(data);
 
       if(user != null){
-        _estadoController.add(Estado.SUCESSO);
+        _stateController.add(LoginState.SUCESSO);
       } else {
-        _estadoController.add(Estado.FALHA);
+        _stateController.add(LoginState.FALHA);
       }
       
-      _dadosLogin = {
+      _loginData = {
         'email': _emailController.value,
         'password': _passwordController.value,
       };
-      _estadoController.add(Estado.SUCESSO);
+      _stateController.add(LoginState.SUCESSO);
     } catch (e) {
-      _estadoController.add(Estado.FALHA);
+      _stateController.add(LoginState.FALHA);
     }
   }
 
   void loginFalha(){
-    _estadoController.add(Estado.OCIOSO);
+    _stateController.add(LoginState.OCIOSO);
   }
 
   @override
   void dispose() {
+    super.dispose();
     _emailController.close();
     _passwordController.close();
-    _estadoController.close();
+    _stateController.close();
   }
 }

@@ -9,20 +9,19 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
-import 'setor_pdf.dart';
+import 'sector_report_pdf.dart';
 
-class MainPDF extends StatefulWidget {
+class SectorReportPage extends StatefulWidget {
 
   @override
-  MainPDFState createState() {
-    return MainPDFState();
+  SectorReportPageState createState() {
+    return SectorReportPageState();
   }
 }
 
-class MainPDFState extends State<MainPDF> with SingleTickerProviderStateMixin {
+class SectorReportPageState extends State<SectorReportPage> with SingleTickerProviderStateMixin {
   List<Tab> _myTabs;
   List<LayoutCallback> _tabGen;
-  List<String> _tabUrl;
   int _tab = 0;
   TabController _tabController;
 
@@ -41,11 +40,7 @@ class MainPDFState extends State<MainPDF> with SingleTickerProviderStateMixin {
       Tab(text: 'SETOR'),
     ];
     _tabGen = const <LayoutCallback>[
-      generateSetor,
-    ];
-
-    _tabUrl = const <String>[
-      'setor_pdf.dart',
+      generateSectorReport,
     ];
 
     _tabController = TabController(

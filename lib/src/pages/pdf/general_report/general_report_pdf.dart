@@ -1,46 +1,42 @@
-import 'dart:io';
 import 'dart:typed_data';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import 'package:ifmaacessivel/src/models/questionario.dart';
-import 'package:ifmaacessivel/src/models/relatorio.dart';
+import 'package:ifmaacessivel/src/models/questionnaire.dart';
+import 'package:ifmaacessivel/src/models/report.dart';
 import 'package:ifmaacessivel/src/models/user.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:pdf/widgets.dart' as pw;
 
-Future<Uint8List> generateSetores(PdfPageFormat pageFormat) async {
-  final lorem = pw.LoremText();
+Future<Uint8List> generateGeneralReport(PdfPageFormat pageFormat) async {
 
-  final setor = SetorConfiguracoes(
+  final sector = SectorConfigurations(
     baseColor: PdfColors.green,
     accentColor: PdfColors.redAccent700,
   );
 
-  return await setor.buildPdf(pageFormat);
+  return await sector.buildPdf(pageFormat);
 }
 
-class SetorConfiguracoes {
-  SetorConfiguracoes({
+class SectorConfigurations {
+  SectorConfigurations({
     this.baseColor,
     this.accentColor,
   });
 
-  static List<Questionario> acessoAEdificacaoList =
-      Relatorio.acessoAEdificacaoList;
-  static List<Questionario> auditoriosList = Relatorio.auditoriosList;
-  static List<Questionario> banheirosList = Relatorio.banheirosList;
-  static List<Questionario> bibliotecaList = Relatorio.bibliotecaList;
-  static List<Questionario> calcadaList = Relatorio.calcadaList;
-  static List<Questionario> circulacaoInternaList =
-      Relatorio.circulacaoInternaList;
-  static List<Questionario> esquadriasList = Relatorio.esquadriasList;
-  static List<Questionario> estacionamentoList = Relatorio.estacionamentoList;
-  static List<Questionario> mobiliarioList = Relatorio.mobiliarioList;
-  static List<Questionario> restaurantesList = Relatorio.restaurantesList;
-  static List<Questionario> vestiariosList = Relatorio.vestiariosList;
+  static List<Questionnaire> acessoAEdificacaoList =
+      Report.acessoAEdificacaoList;
+  static List<Questionnaire> auditoriosList = Report.auditoriosList;
+  static List<Questionnaire> banheirosList = Report.banheirosList;
+  static List<Questionnaire> bibliotecaList = Report.bibliotecaList;
+  static List<Questionnaire> calcadaList = Report.calcadaList;
+  static List<Questionnaire> circulacaoInternaList =
+      Report.circulacaoInternaList;
+  static List<Questionnaire> esquadriasList = Report.esquadriasList;
+  static List<Questionnaire> estacionamentoList = Report.estacionamentoList;
+  static List<Questionnaire> mobiliarioList = Report.mobiliarioList;
+  static List<Questionnaire> restaurantesList = Report.restaurantesList;
+  static List<Questionnaire> vestiariosList = Report.vestiariosList;
   final PdfColor baseColor;
   final PdfColor accentColor;
 
@@ -53,70 +49,70 @@ class SetorConfiguracoes {
   PdfColor get _accentTextColor =>
       baseColor.luminance < 0.5 ? _lightColor : _darkColor;
 
-  double _maximoTotal() {
+  double _totalMaximun() {
     return 100;
   }
 
-  String _requisitoDeAcessibilidade(){
-    if(valorAcessibilidade() < 70){
+  String _acessibilityRequirement(){
+    if(acessibilityValue() < 70){
       return "Irregular";
-    } else if(valorAcessibilidade () >= 70 && valorAcessibilidade() < 85){
+    } else if(acessibilityValue () >= 70 && acessibilityValue() < 85){
       return "Regular";
     }else{
       return "Ótimo";
     }
   }
 
-  double valorAcessibilidade() {
+  double acessibilityValue() {
     double valorTotal = 0;
-    acessoAEdificacaoList.forEach((questionario) {
-      if (questionario.situacao == 'Sim' || questionario.situacao == 'N/A') {
-        valorTotal = valorTotal + questionario.q;
+    acessoAEdificacaoList.forEach((questionnaire) {
+      if (questionnaire.situation == 'Sim' || questionnaire.situation == 'N/A') {
+        valorTotal = valorTotal + questionnaire.q;
       }
     });
-    auditoriosList.forEach((questionario) {
-      if (questionario.situacao == 'Sim' || questionario.situacao == 'N/A') {
-        valorTotal = valorTotal + questionario.q;
+    auditoriosList.forEach((questionnaire) {
+      if (questionnaire.situation == 'Sim' || questionnaire.situation == 'N/A') {
+        valorTotal = valorTotal + questionnaire.q;
       }
     });
-    banheirosList.forEach((questionario) {
-      if (questionario.situacao == 'Sim' || questionario.situacao == 'N/A') {
-        valorTotal = valorTotal + questionario.q;
+    banheirosList.forEach((questionnaire) {
+      if (questionnaire.situation == 'Sim' || questionnaire.situation == 'N/A') {
+        valorTotal = valorTotal + questionnaire.q;
       }
     });
-    calcadaList.forEach((questionario) {
-      if (questionario.situacao == 'Sim' || questionario.situacao == 'N/A') {
-        valorTotal = valorTotal + questionario.q;
+    calcadaList.forEach((questionnaire) {
+      if (questionnaire.situation == 'Sim' || questionnaire.situation == 'N/A') {
+        valorTotal = valorTotal + questionnaire.q;
       }
     });
-    circulacaoInternaList.forEach((questionario) {
-      if (questionario.situacao == 'Sim' || questionario.situacao == 'N/A') {
-        valorTotal = valorTotal + questionario.q;
+    circulacaoInternaList.forEach((questionnaire) {
+      if (questionnaire.situation == 'Sim' || questionnaire.situation == 'N/A') {
+        valorTotal = valorTotal + questionnaire.q;
       }
     });
-    esquadriasList.forEach((questionario) {
-      if (questionario.situacao == 'Sim' || questionario.situacao == 'N/A') {
-        valorTotal = valorTotal + questionario.q;
+    esquadriasList.forEach((questionnaire) {
+      if (questionnaire.situation == 'Sim' || questionnaire.situation == 'N/A') {
+        valorTotal = valorTotal + questionnaire.q;
       }
     });
-    estacionamentoList.forEach((questionario) {
-      if (questionario.situacao == 'Sim' || questionario.situacao == 'N/A') {
-        valorTotal = valorTotal + questionario.q;
+    estacionamentoList.forEach((questionnaire) {
+      if (questionnaire.situation == 'Sim' || questionnaire.situation == 'N/A') {
+        valorTotal = valorTotal + questionnaire.q;
       }
     });
-    mobiliarioList.forEach((questionario) {
-      if (questionario.situacao == 'Sim' || questionario.situacao == 'N/A') {
-        valorTotal = valorTotal + questionario.q;
+    mobiliarioList.forEach((questionnaire) {
+      if (questionnaire.situation == 'Sim' || questionnaire.situation == 'N/A') {
+        valorTotal = valorTotal + questionnaire.q;
       }
     });
-    restaurantesList.forEach((questionario) {
-      if (questionario.situacao == 'Sim' || questionario.situacao == 'N/A') {
-        valorTotal = valorTotal + questionario.q;
+    restaurantesList.forEach((questionnaire) {
+      if (questionnaire.situation == 'Sim' || questionnaire.situation == 'N/A') {
+        valorTotal = valorTotal + questionnaire.q;
       }
     });
-    vestiariosList.forEach((questionario) {
-      if (questionario.situacao == 'Sim' || questionario.situacao == 'N/A') {
-        valorTotal = valorTotal + questionario.q;
+    vestiariosList.forEach((questionnaire) {
+      if (questionnaire.situation == 'Sim' || questionnaire.situation == 'N/A') {
+        valorTotal = valorTotal + questionnaire.q;
       }
     });
     return valorTotal;
@@ -238,7 +234,7 @@ class SetorConfiguracoes {
                         crossAxisCount: 2,
                         children: [
                           pw.Text('Encarregado(a):'),
-                          pw.Text(User.encarregado),
+                          pw.Text(User.responsible),
                           pw.Text('Data:'),
                           pw.Text(_formatDate(DateTime.now())),
                         ],
@@ -1176,7 +1172,7 @@ class SetorConfiguracoes {
                 ),
               ),
               pw.Text(
-                User.endereco,
+                User.address,
                 style: const pw.TextStyle(
                   fontSize: 8,
                   lineSpacing: 5,
@@ -1210,21 +1206,21 @@ class SetorConfiguracoes {
                         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                         children: [
                           pw.Text('Total:'),
-                          pw.Text(_formatCurrency(valorAcessibilidade())),
+                          pw.Text(_formatCurrency(acessibilityValue())),
                         ],
                       ),
                       pw.Row(
                         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                         children: [
                           pw.Text('Máximo Total:'),
-                          pw.Text(_formatCurrency(_maximoTotal())),
+                          pw.Text(_formatCurrency(_totalMaximun())),
                         ],
                       ),
                       pw.Row(
                         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                         children: [
                           pw.Text('Estado: '),
-                          pw.Text(_requisitoDeAcessibilidade()),
+                          pw.Text(_acessibilityRequirement()),
                         ],
                       )
                     ],
@@ -1264,7 +1260,7 @@ class SetorConfiguracoes {
                 ),
               ),
               pw.Text(
-                User.telefone,
+                User.phone,
                 textAlign: pw.TextAlign.justify,
                 style: const pw.TextStyle(
                   fontSize: 6,

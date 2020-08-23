@@ -2,14 +2,13 @@ import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
 import 'package:ifmaacessivel/src/app/app_bloc.dart';
 import 'package:ifmaacessivel/src/app/app_widget.dart';
-import 'package:ifmaacessivel/src/auth/authentification.dart';
-import 'package:ifmaacessivel/src/models/questionario.dart';
-import 'package:ifmaacessivel/src/models/setor.dart';
+import 'package:ifmaacessivel/src/auth/auth.dart';
+import 'package:ifmaacessivel/src/models/sector.dart';
 
 
 
 class AppModule extends ModuleWidget {
-  static List<Setor> setores;
+  static List<Sector> sectors;
   @override
   List<Bloc> get blocs => [
         Bloc((i) => AppBloc()),
@@ -17,7 +16,7 @@ class AppModule extends ModuleWidget {
 
   @override
   List<Dependency> get dependencies => [
-    Dependency((i) => Authentification())
+    Dependency((i) => Auth())
   ];
 
   @override

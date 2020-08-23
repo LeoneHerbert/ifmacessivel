@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class Chart {
-  String nome;
-  double valor;
+  String name;
+  double value;
   Color color;
 
-  Chart(this.nome, this.valor, this.color);
+  Chart(this.name, this.value, this.color);
 }

@@ -1,32 +1,32 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ifmaacessivel/src/app/app_module.dart';
-import 'package:ifmaacessivel/src/auth/authentification.dart';
+import 'package:ifmaacessivel/src/auth/auth.dart';
 
 class User {
   static String campus;
   static String email;
-  static String endereco;
-  static String telefone;
-  static String encarregado;
+  static String address;
+  static String phone;
+  static String responsible;
   static String image;
   static String pathGoogleDrive;
 
   User() {
     Firestore.instance
-        .collection(AppModule.to.getDependency<Authentification>().getUserId())
+        .collection(AppModule.to.getDependency<Auth>().getUserId())
         .document("usuario")
         .snapshots()
         .listen(
       (data) {
         campus = data.data['campus'];
         email = data.data['email'];
-        endereco = data.data['endereco'];
-        telefone = data.data['telefone'];
-        encarregado = data.data['encarregado'];
+        address = data.data['endereco'];
+        phone = data.data['telefone'];
+        responsible = data.data['encarregado'];
       },
     );
     Firestore.instance
-        .collection(AppModule.to.getDependency<Authentification>().getUserId())
+        .collection(AppModule.to.getDependency<Auth>().getUserId())
         .document("image")
         .snapshots()
         .listen(

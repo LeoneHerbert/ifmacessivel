@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-class Debouncer {
+class Debounce {
   final int milliseconds;
   VoidCallback action;
   Timer _timer;
 
-  Debouncer({this.milliseconds});
+  Debounce({this.milliseconds});
 
   run(VoidCallback action) {
     if (null != _timer) {

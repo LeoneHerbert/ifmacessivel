@@ -2,14 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ifmaacessivel/src/app/app_module.dart';
-import 'package:ifmaacessivel/src/auth/authentification.dart';
+import 'package:ifmaacessivel/src/auth/auth.dart';
 import 'package:ifmaacessivel/src/models/user.dart';
-import 'package:ifmaacessivel/src/pages/cadastrar_usuario/cadastrar_usuario_module.dart';
-import 'package:ifmaacessivel/src/pages/estatisticas/estatisticas_module.dart';
 import 'package:ifmaacessivel/src/pages/home/home_module.dart';
 import 'package:ifmaacessivel/src/pages/login/login_module.dart';
 import 'package:ifmaacessivel/src/pages/profile/profile_module.dart';
-import 'package:ifmaacessivel/src/pages/setores/setores_module.dart';
+import 'package:ifmaacessivel/src/pages/register_user/register_user_module.dart';
+import 'package:ifmaacessivel/src/pages/sectors/sectors_module.dart';
+import 'package:ifmaacessivel/src/pages/statistics/statistics_module.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // ignore: must_be_immutable
@@ -46,7 +46,7 @@ class SideMenu extends StatelessWidget {
               StreamBuilder<DocumentSnapshot>(
                 stream: Firestore.instance
                     .collection(AppModule.to
-                        .getDependency<Authentification>()
+                        .getDependency<Auth>()
                         .getUserId())
                     .document("usuario")
                     .snapshots(),
@@ -129,7 +129,7 @@ class SideMenu extends StatelessWidget {
                   Navigator.push(
                     context,
                     CupertinoPageRoute(
-                      builder: (context) => SetoresModule(),
+                      builder: (context) => SectorsModule(),
                     ),
                   );
                 },
@@ -200,7 +200,7 @@ class SideMenu extends StatelessWidget {
                   Navigator.push(
                     context,
                     CupertinoPageRoute(
-                      builder: (context) => EstatisticasModule(),
+                      builder: (context) => StatisticsModule(),
                     ),
                   );
                 },
@@ -211,7 +211,7 @@ class SideMenu extends StatelessWidget {
               StreamBuilder<DocumentSnapshot>(
                 stream: Firestore.instance
                     .collection(AppModule.to
-                        .getDependency<Authentification>()
+                        .getDependency<Auth>()
                         .getUserId())
                     .document("nivel_de_acesso")
                     .snapshots(),
@@ -240,7 +240,7 @@ class SideMenu extends StatelessWidget {
                                 Navigator.push(
                                   context,
                                   CupertinoPageRoute(
-                                    builder: (context) => CadastrarUsuarioModule(),
+                                    builder: (context) => RegisterUserModule(),
                                   ),
                                 );
                               },
@@ -275,7 +275,7 @@ class SideMenu extends StatelessWidget {
                       builder: (context) => LoginModule(),
                     ),
                   );
-                  AppModule.to.getDependency<Authentification>().logout();
+                  AppModule.to.getDependency<Auth>().logout();
                 },
               ),
             ],

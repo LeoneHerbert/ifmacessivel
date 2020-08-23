@@ -2,30 +2,25 @@ import 'dart:async';
 
 class LoginValidator {
   final emailValidation = StreamTransformer<String, String>.fromHandlers(
-      handleData: (usuario, sink) {
-    if (usuario.trim().length > 13 &&
-            usuario.trim().contains("@") &&
-            usuario.trim().contains("gmail.com") ||
-        usuario.trim().contains("hotmail.com") ||
-        usuario.trim().contains("ifma.edu.br") ||
-        usuario.trim().contains("outlook.com")) {
-      sink.add(usuario);
+      handleData: (email, sink) {
+    if (email.trim().length > 13 &&
+            email.trim().contains("@") &&
+            email.trim().contains("gmail.com") ||
+        email.trim().contains("hotmail.com") ||
+        email.trim().contains("ifma.edu.br") ||
+        email.trim().contains("outlook.com")) {
+      sink.add(email);
     } else {
       sink.addError("Digite um e-mail válido!");
     }
   });
 
   final passwordValidation =
-      StreamTransformer<String, String>.fromHandlers(handleData: (senha, sink) {
-    if (senha.trim().length >= 6) {
-      sink.add(senha);
+      StreamTransformer<String, String>.fromHandlers(handleData: (password, sink) {
+    if (password.trim().length >= 6) {
+      sink.add(password);
     } else {
       sink.addError("Senha inválida! Mínimo de 6 caracteres.");
     }
-  });
-
-  final passwordConfirmationValidation =
-      StreamTransformer<String, String>.fromHandlers(handleData: (senha, sink) {
-    sink.addError("Senha diferente.");
   });
 }

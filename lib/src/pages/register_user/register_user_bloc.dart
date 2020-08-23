@@ -2,11 +2,11 @@ import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ifmaacessivel/src/app/app_module.dart';
-import 'package:ifmaacessivel/src/auth/authentification.dart';
+import 'package:ifmaacessivel/src/auth/auth.dart';
 import 'package:ifmaacessivel/src/shared/validators/login_validator.dart';
 import 'package:rxdart/rxdart.dart';
 
-class CadastrarUsuarioBloc extends BlocBase with LoginValidator {
+class RegisterUserBloc extends BlocBase with LoginValidator {
   final _emailController = BehaviorSubject<String>();
   final _passwordController = BehaviorSubject<String>();
 
@@ -20,12 +20,12 @@ class CadastrarUsuarioBloc extends BlocBase with LoginValidator {
 
   Function(String) get changePassword => _passwordController.sink.add;
 
-  Stream<bool> get outSubmitValido =>
+  Stream<bool> get outSubmitValid =>
       Observable.combineLatest2(outEmail, outPassword, (a, b) => true);
 
   Future<bool> submit() async {
     try {
-      Authentification auth = AppModule.to.getDependency<Authentification>();
+      Auth auth = AppModule.to.getDependency<Auth>();
 
       Map<String, String> data = {
         'email': _emailController.value,
@@ -72,6 +72,7 @@ class CadastrarUsuarioBloc extends BlocBase with LoginValidator {
 
   @override
   void dispose() {
+    super.dispose();
     _emailController.close();
     _passwordController.close();
   }

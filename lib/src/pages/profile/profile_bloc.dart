@@ -1,57 +1,82 @@
 import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ifmaacessivel/src/app/app_module.dart';
-import 'package:ifmaacessivel/src/auth/authentification.dart';
+import 'package:ifmaacessivel/src/auth/auth.dart';
+import 'package:ifmaacessivel/src/models/user.dart';
+import 'package:ifmaacessivel/src/shared/validators/profile_validator.dart';
 import 'package:rxdart/rxdart.dart';
 
-class ProfileBloc extends BlocBase {
-  final _campusController = BehaviorSubject<String>();
-  final _emailController = BehaviorSubject<String>();
-  final _enderecoController = BehaviorSubject<String>();
-  final _telefoneController = BehaviorSubject<String>();
-  final _encarregadoController = BehaviorSubject<String>();
+class ProfileBloc extends BlocBase with ProfileValidator {
+  final campusController = BehaviorSubject<String>();
+  final emailController = BehaviorSubject<String>();
+  final addressController = BehaviorSubject<String>();
+  final phoneController = BehaviorSubject<String>();
+  final responsibleController = BehaviorSubject<String>();
 
-  Stream<String> get outCampus => _campusController;
+  ProfileBloc() {
+    campusController.sink.add(User.campus);
+    emailController.sink.add(User.email);
+    addressController.sink.add(User.address);
+    phoneController.sink.add(User.phone);
+    responsibleController.sink.add(User.responsible);
+  }
 
-  Stream<String> get outEmail => _emailController;
+  Stream<String> get outCampus =>
+      campusController.stream.transform(inputValidator);
 
-  Stream<String> get outEndereco => _enderecoController;
+  Stream<String> get outEmail =>
+      emailController.stream.transform(inputValidator);
 
-  Stream<String> get outTelefone => _telefoneController;
+  Stream<String> get outAddress =>
+      addressController.stream.transform(inputValidator);
 
-  Stream<String> get outEncarregado => _encarregadoController;
+  Stream<String> get outPhone =>
+      phoneController.stream.transform(inputValidator);
 
-  Function(String) get changeCampus => _campusController.sink.add;
+  Stream<String> get outResponsible =>
+      responsibleController.stream.transform(inputValidator);
 
-  Function(String) get changeEmail => _emailController.sink.add;
+  Function(String) get changeCampus => campusController.sink.add;
 
-  Function(String) get changeEndereco => _enderecoController.sink.add;
+  Function(String) get changeEmail => emailController.sink.add;
 
-  Function(String) get changeTelefone => _telefoneController.sink.add;
+  Function(String) get changeAddress => addressController.sink.add;
 
-  Function(String) get changeEncarregado => _encarregadoController.sink.add;
+  Function(String) get changePhone => phoneController.sink.add;
 
-  void submit() {
+  Function(String) get changeResponsible => responsibleController.sink.add;
+
+  bool submit() {
     Map<String, String> data = {
-      'campus': _campusController.value,
-      'email': _emailController.value,
-      'endereco': _enderecoController.value,
-      'telefone': _telefoneController.value,
-      'encarregado': _encarregadoController.value,
+      'campus': campusController.value,
+      'email': emailController.value,
+      'endereco': addressController.value,
+      'telefone': phoneController.value,
+      'encarregado': responsibleController.value,
     };
 
-    Firestore.instance
-        .collection(AppModule.to.getDependency<Authentification>().getUserId())
-        .document("usuario")
-        .setData(data);
+    try {
+      Firestore.instance
+          .collection(AppModule.to.getDependency<Auth>().getUserId())
+          .document("usuario")
+          .setData(data)
+          .whenComplete(() {
+        return true;
+      });
+      return true;
+    } catch (error) {
+      print(error);
+      return false;
+    }
   }
 
   @override
   void dispose() {
-    _campusController.close();
-    _emailController.close();
-    _enderecoController.close();
-    _telefoneController.close();
-    _encarregadoController.close();
+    super.dispose();
+    campusController.close();
+    emailController.close();
+    addressController.close();
+    phoneController.close();
+    responsibleController.close();
   }
 }

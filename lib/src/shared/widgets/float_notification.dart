@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class FloatNotification extends StatelessWidget {
-  final String texto;
+  final String text;
 
-  const FloatNotification(this.texto);
+  const FloatNotification(this.text);
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -14,7 +14,7 @@ class FloatNotification extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               SizedBox(height: 10),
-              Text(texto),
+              Text(text),
             ],
           ),
         ),

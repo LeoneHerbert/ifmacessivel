@@ -1,20 +1,20 @@
 import 'dart:io';
 
-class Questionario {
-  const Questionario(
+class Questionnaire {
+  const Questionnaire(
       this.id,
-      this.texto,
+      this.text,
       this.q,
-      this.situacao,
-      this.setor,
+      this.situation,
+      this.sector,
       this.image,
       );
 
   final String id;
-  final String texto;
+  final String text;
   final double q;
-  final String situacao;
-  final String setor;
+  final String situation;
+  final String sector;
   final File image;
 
   String getIndex(int index) {
@@ -22,11 +22,11 @@ class Questionario {
       case 0:
         return id;
       case 1:
-        return texto;
+        return text;
       case 2:
         return _formatCurrency(q);
       case 3:
-        return situacao;
+        return situation;
     }
     return '';
   }

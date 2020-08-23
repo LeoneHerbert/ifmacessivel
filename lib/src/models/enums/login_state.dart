@@ -1,4 +1,4 @@
-enum Estado {
+enum LoginState {
   OCIOSO,
   CARREGANDO,
   SUCESSO,

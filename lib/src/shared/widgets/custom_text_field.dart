@@ -6,10 +6,10 @@ class CustomTextField extends StatelessWidget {
   final bool obscure;
   final Stream<String> stream;
   final Function(String) onChanged;
-  final int minLinhas;
-  final int maxLinhas;
+  final int minLines;
+  final int maxLines;
   final TextEditingController controller;
-  final String valorInicial;
+  final String initialValue;
 
   CustomTextField({
     this.icon,
@@ -17,13 +17,13 @@ class CustomTextField extends StatelessWidget {
     this.obscure = false,
     this.stream,
     this.onChanged,
-    this.minLinhas = 1,
-    this.maxLinhas = 1,
+    this.minLines = 1,
+    this.maxLines = 1,
     this.controller,
-    this.valorInicial,
+    this.initialValue,
   }) {
-    if (valorInicial != null) {
-      onChanged(valorInicial);
+    if (initialValue != null) {
+      onChanged(initialValue);
     }
   }
 
@@ -34,10 +34,10 @@ class CustomTextField extends StatelessWidget {
       stream: stream,
       builder: (context, snapshot) {
         return TextFormField(
-          initialValue: valorInicial != null ? valorInicial : null,
+          initialValue: initialValue != null ? initialValue : null,
           controller: controller,
-          minLines: minLinhas,
-          maxLines: maxLinhas,
+          minLines: minLines,
+          maxLines: maxLines,
           onChanged: onChanged,
           decoration: InputDecoration(
             icon: Icon(

@@ -1,34 +1,31 @@
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:flutter/services.dart';
-import 'package:ifmaacessivel/src/models/questionario.dart';
+import 'package:ifmaacessivel/src/models/questionnaire.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:pdf/widgets.dart';
 
-Future<Uint8List> generateSetor(PdfPageFormat pageFormat) async {
-  final lorem = pw.LoremText();
+Future<Uint8List> generateSectorReport(PdfPageFormat pageFormat) async {
 
-  final setor = SetorConfiguracoes(
+  final sector = SectorConfigurations(
     baseColor: PdfColors.green,
     accentColor: PdfColors.redAccent700,
   );
 
-  return await setor.buildPdf(pageFormat);
+  return await sector.buildPdf(pageFormat);
 }
 
-class SetorConfiguracoes {
-  SetorConfiguracoes({
+class SectorConfigurations {
+  SectorConfigurations({
     this.baseColor,
     this.accentColor,
   });
 
-  static List<Questionario> questionarios;
-  String nome = questionarios[1].setor;
-  File image = questionarios[1].image;
+  static List<Questionnaire> questionnaires;
+  String name = questionnaires[1].sector;
+  File image = questionnaires[1].image;
   final PdfColor baseColor;
   final PdfColor accentColor;
 
@@ -41,14 +38,14 @@ class SetorConfiguracoes {
   PdfColor get _accentTextColor =>
       baseColor.luminance < 0.5 ? _lightColor : _darkColor;
 
-  double get _maximoTotal => questionarios
+  double get _totalMaximun => questionnaires
       .map<double>((questionario) => questionario.q)
       .reduce((a, b) => a + b);
 
-  double valorAcessibilidade() {
+  double acessibilityValue() {
     double valorTotal = 0;
-    questionarios.forEach((questionario) {
-      if (questionario.situacao == 'Sim' || questionario.situacao == 'N/A') {
+    questionnaires.forEach((questionario) {
+      if (questionario.situation == 'Sim' || questionario.situation == 'N/A') {
         print(questionario.q);
         valorTotal = valorTotal + questionario.q;
       }
@@ -255,7 +252,7 @@ class SetorConfiguracoes {
         pw.Container(
           padding: pw.EdgeInsets.all(20),
           child: pw.Text(
-            nome,
+            name,
             style: pw.TextStyle(
               color: baseColor,
               fontWeight: pw.FontWeight.bold,
@@ -321,14 +318,14 @@ class SetorConfiguracoes {
                         mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                         children: [
                           pw.Text('Total:'),
-                          pw.Text(_formatCurrency(valorAcessibilidade())),
+                          pw.Text(_formatCurrency(acessibilityValue())),
                         ],
                       ),
                       pw.Row(
                           mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                           children: [
                             pw.Text('Máximo Total:'),
-                            pw.Text(_formatCurrency(_maximoTotal)),
+                            pw.Text(_formatCurrency(_totalMaximun)),
                           ])
                     ],
                   ),
@@ -463,10 +460,10 @@ class SetorConfiguracoes {
         (col) => tableHeaders[col],
       ),
       data: List<List<String>>.generate(
-        questionarios.length,
+        questionnaires.length,
         (row) => List<String>.generate(
           tableHeaders.length,
-          (col) => questionarios[row].getIndex(col),
+          (col) => questionnaires[row].getIndex(col),
         ),
       ),
     );

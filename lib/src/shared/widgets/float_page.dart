@@ -1,22 +1,11 @@
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ifmaacessivel/src/models/user.dart';
 import 'package:ifmaacessivel/src/pages/profile/profile_bloc.dart';
 import 'package:ifmaacessivel/src/pages/profile/profile_module.dart';
 import 'package:ifmaacessivel/src/shared/widgets/custom_text_field.dart';
 
 class FloatPage extends StatelessWidget {
   final _profileBloc = ProfileModule.to.getBloc<ProfileBloc>();
-
-  FloatPage() {
-    _profileBloc.changeCampus(User.campus);
-    _profileBloc.changeEmail(User.email);
-    _profileBloc.changeEncarregado(User.encarregado);
-    _profileBloc.changeEndereco(User.endereco);
-    _profileBloc.changeTelefone(User.telefone);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,15 +31,15 @@ class FloatPage extends StatelessWidget {
                 hint: 'Campus',
                 stream: _profileBloc.outCampus,
                 onChanged: _profileBloc.changeCampus,
-                valorInicial: User.campus,
+                initialValue: _profileBloc.campusController.value,
                 obscure: false,
               ),
               CustomTextField(
                 icon: Icons.person,
                 hint: 'Encarregado(a)',
-                stream: _profileBloc.outEncarregado,
-                onChanged: _profileBloc.changeEncarregado,
-                valorInicial: User.encarregado,
+                stream: _profileBloc.outResponsible,
+                onChanged: _profileBloc.changeResponsible,
+                initialValue: _profileBloc.responsibleController.value,
                 obscure: false,
               ),
               CustomTextField(
@@ -58,23 +47,23 @@ class FloatPage extends StatelessWidget {
                 hint: 'E-mail',
                 stream: _profileBloc.outEmail,
                 onChanged: _profileBloc.changeEmail,
-                valorInicial: User.email,
+                initialValue: _profileBloc.emailController.value,
                 obscure: false,
               ),
               CustomTextField(
                 icon: Icons.phone,
                 hint: 'Telefone',
-                stream: _profileBloc.outTelefone,
-                onChanged: _profileBloc.changeTelefone,
-                valorInicial: User.telefone,
+                stream: _profileBloc.outPhone,
+                onChanged: _profileBloc.changePhone,
+                initialValue: _profileBloc.phoneController.value,
                 obscure: false,
               ),
               CustomTextField(
                 icon: Icons.location_on,
                 hint: 'Endereço',
-                stream: _profileBloc.outEndereco,
-                onChanged: _profileBloc.changeEndereco,
-                valorInicial: User.endereco,
+                stream: _profileBloc.outAddress,
+                onChanged: _profileBloc.changeAddress,
+                initialValue: _profileBloc.addressController.value,
                 obscure: false,
               ),
               SizedBox(
@@ -113,8 +102,9 @@ class FloatPage extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        _profileBloc.submit();
-                        Navigator.pop(context);
+                        if (_profileBloc.submit()) {
+                          Navigator.pop(context);
+                        }
                       },
                     ),
                   ),
